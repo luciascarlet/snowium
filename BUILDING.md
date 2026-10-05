@@ -1,6 +1,6 @@
 # Source and build record
 
-The current release is a **prebuilt pass39 font-fix candidate**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
+The current release is a **prebuilt pass40 style-fix candidate**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
 
 The working app was built on Apple Silicon with Xcode 27.1, Chromium's pinned host compiler, MacPorts Clang 19.1.7 for x86_64 compilation, modified SDK 14.5 headers, original SDK 10.6 audio link stubs, bundled libc++/libc++abi, PLWeakCompatibility, MacPorts LegacySupport and an emulated-TLS Rust standard library. The app targets Intel OS X 10.6.8.
 
@@ -28,7 +28,13 @@ To regenerate the package on the modern Mac:
 python3 ci/package.py \
   --app /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/Chromium.app \
   --credits /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/gen/components/resources/about_credits.html \
-  --version 124.0.6367.207-sl.2 --output release-assets/v124.0.6367.207-sl.2
+  --version 124.0.6367.207-sl.3 --output release-assets/v124.0.6367.207-sl.3
 ```
 
 Use a fresh output directory; packaging refuses to overwrite assets. To upload after creating/pushing a GitHub repository, follow [PUBLISHING.md](PUBLISHING.md). Packaging alone does not publish a release.
+
+## Style regression fixture
+
+`port/tests/style-custom-properties.html` reproduces the registered custom-property/animation/SVG cache mismatch. It checks dynamically changed universal values, unset values and inherited widths while animation frames advance. It reproduced the style assertion before the fix and passed afterward on the target OS.
+
+`port/scripts/probe_style_crash.mjs` is the retained loopback DevTools fixture observer, run with a modern Node providing global `fetch` and `WebSocket`. Set `SNOWIUM_CDP_ENDPOINT` for the isolated test browser and pass the served fixture URL and observation duration. Hosted CI hashes these inputs; it does not execute native renderer tests.

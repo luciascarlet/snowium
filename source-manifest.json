@@ -1,7 +1,7 @@
 {
   "upstream": "124.0.6367.207",
   "legacy": "124.0.6367.207.1",
-  "candidate": "pass39-font-fix",
+  "candidate": "pass40-style-fix",
   "files": {
     "port/overlay/snow_leopard/BUILD.gn": "e9987f111ed5cf5cc9d442ddd1a8ffc01a31774a68ff40777bf9bb4f77026fea",
     "port/overlay/snow_leopard/cocoa_compat.h": "f2a399d3f1e5ff99eb729f41baa6c2ee216315526c5ea5bc7c5585134b549e90",
@@ -23,7 +23,7 @@
     "port/overlay/snow_leopard/security_compat.h": "44c5ed3be25bfe77507fb81b1b6188b48ec54f223fa58ca841078dfba0ec656f",
     "port/overlay/snow_leopard/system_compat.cc": "dc87a3f88d861c9d8ae9d38a52a51bb27b15865f490e42a13dd758b5885d69f8",
     "port/overlay/snow_leopard/system_compat.h": "0ffdcbe2909abd1b16a032412782e248ebff50fd4a9aa3452828e1355e2f6c2a",
-    "port/patches/chromium-124-snow-leopard.patch": "2a4f756aac9a8c2fcd4af30a49f60ab69f9663b6d2b0c2fb9e16f22ba0a48a73",
+    "port/patches/chromium-124-snow-leopard.patch": "02e602cad1fdc7dbbbccd40b9ca465b9d6be921b3c32d934fa854fc9869a42c5",
     "port/references/API-MAP.md": "42ed121af9739f3c88e2e0e7406fe5b5950b4b72293371163798d72599779c62",
     "port/references/angle-lion.patch": "59c0db5e0f640ecdf506642e2201b35c3207af6f0b31f35d566374fa5fd8156f",
     "port/references/base-selection.md": "602ff4a9fe7c35ad68f631f12873840a15556b905772971cb4e9db3a4c119663",
@@ -73,7 +73,7 @@
     "port/scripts/prepare-esbuild.py": "d7e5665b9540ed3f1b5eae590847e51dbc77a5a3c90562b0a96dd310da0c1217",
     "port/scripts/prepare-link-stubs.py": "e480c22effc17f96da0bbd5d05abc8cf6136881ccfbfc1c03b52c492d4f9f52f",
     "port/scripts/prepare_mojo_sandbox_profile.py": "46b01fcbdf05d6d7da4df63fc218d0fb1f95282ee9b8b1c8908c2ca68eab0a91",
-    "port/scripts/run_native_probes.py": "3a278b155c3017317fec79bf19e720adef00ce12ef9c258188bc7bbf91acdf11",
+    "port/scripts/run_native_probes.py": "d3ea58ba3fe85c0e6948ebe55ac2fba8662ffa464dde74e251c4240af5b90755",
     "port/scripts/sync_overlay.py": "5e49375c040584b7a27f0b8327d5cb6a6ba132cce1d00a5f302239b6b4f110cc",
     "port/tls-compat/README.md": "6831a3f58dcc0488fe7c00e4b87b992cdb4da10b1b8b590a832a506a0793cd7b",
     "port/tls-compat/build-runtime.sh": "e4e202e9924fdde0ea7d45e4bb6554371ac8216b8aeacadf23970c99401eaeae",
@@ -386,6 +386,8 @@
     "licenses/CHROMIUM": "368cca1106be99d39ecd32a38d8305585d802a475effb66380b91ffc9bcf709b",
     "licenses/LLVM": "1a8f1058753f1ba890de984e48f0242a3a5c29a6a8f2ed9fd813f36985387e8d",
     "licenses/MacPorts-LegacySupport": "327758c118a3c9be158e788a8397035cfa62738a977618cdc44ba09aaa0bad3d",
-    "licenses/PLWeakCompatibility": "cd43d2e452c2faf04912e1804e7a17922a72ce214ca3aa3935afc5cfad122252"
+    "licenses/PLWeakCompatibility": "cd43d2e452c2faf04912e1804e7a17922a72ce214ca3aa3935afc5cfad122252",
+    "port/scripts/probe_style_crash.mjs": "d84c16b0345764e4c06a56b14b6c91cb00cb7e0c676eb3fdbd5f448802e78c5e",
+    "port/tests/style-custom-properties.html": "42136b277c8f50f793ed805fe4313c6985df65292db5cff24a32eff4f239d235"
   }
 }

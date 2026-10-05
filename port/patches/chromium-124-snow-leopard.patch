@@ -6361,6 +6361,44 @@
 +    use_minikin_hyphenation = true
 +  }
 +}
+--- a/third_party/blink/renderer/core/style/style_variables.cc
++++ b/third_party/blink/renderer/core/style/style_variables.cc
+@@ -5,6 +5,7 @@
+ #include "third_party/blink/renderer/core/style/style_variables.h"
+ 
+ #include "base/memory/values_equivalent.h"
++#include "third_party/blink/renderer/core/css/css_unparsed_declaration_value.h"
+ 
+ namespace blink {
+ 
+@@ -30,7 +31,26 @@
+   if (!a.has_value()) {
+     return true;
+   }
+-  return base::ValuesEquivalent(a.value(), b.value());
++  if (base::ValuesEquivalent(a.value(), b.value())) {
++    return true;
++  }
++  const auto* a_unparsed = DynamicTo<CSSUnparsedDeclarationValue>(a.value());
++  const auto* b_unparsed = DynamicTo<CSSUnparsedDeclarationValue>(b.value());
++  if (!a_unparsed || !b_unparsed) {
++    return false;
++  }
++
++  // Registered properties with universal syntax are reparsed during cascade
++  // application. CSSUnparsedDeclarationValue uses token-data identity, so two
++  // equivalent computed values can otherwise fail the style-cache invariants.
++  // Keep unresolved declarations and different URL contexts distinct.
++  const CSSVariableData* a_data = a_unparsed->VariableDataValue();
++  const CSSVariableData* b_data = b_unparsed->VariableDataValue();
++  return !a_data->NeedsVariableResolution() &&
++         !b_data->NeedsVariableResolution() &&
++         a_unparsed->ParserContext() == b_unparsed->ParserContext() &&
++         a_data->IsAnimationTainted() == b_data->IsAnimationTainted() &&
++         base::ValuesEquivalent(a_data, b_data);
+ }
+ 
+ }  // namespace
 --- a/third_party/blink/renderer/platform/wtf/hash_table.h
 +++ b/third_party/blink/renderer/platform/wtf/hash_table.h
 @@ -1632,7 +1632,7 @@

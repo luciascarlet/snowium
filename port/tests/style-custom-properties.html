@@ -1,0 +1,34 @@
+<!doctype html><meta charset="utf-8"><title>Custom property regression</title>
+<style>
+@property --unset { syntax: "*"; inherits: false; }
+@property --color { syntax: "<color>"; inherits: false; initial-value: transparent; }
+@property --offset { syntax: "<length>"; inherits: false; initial-value: 0px; }
+@property --universal { syntax: "*"; inherits: false; initial-value: 0; }
+* { --unset: initial; --color: transparent; --offset: 0px; --universal: 0; }
+.parent { --inherited: 10px; }
+.different-parent { --inherited: 20px; }
+.box { width: calc(40px + var(--inherited)); height: 20px; background: var(--color); }
+.animated { animation: fade 0.2s linear infinite alternate; }
+@keyframes fade { from { opacity: 0.4; } to { opacity: 1; } }
+</style>
+<div class="parent"><div class="box animated"></div><svg><rect class="box" width="20" height="20"/></svg></div>
+<div class="different-parent"><div class="box animated"></div><svg><rect class="box" width="20" height="20"/></svg></div>
+<script>
+window.regression = {frames: 0, failures: [], values: []};
+function frame() {
+  const boxes = document.querySelectorAll('div.box');
+  for (let i = 0; i < boxes.length; ++i) {
+    boxes[i].style.setProperty('--universal', String((regression.frames % 2) + i));
+    const style = getComputedStyle(boxes[i]);
+    if (style.width !== (50 + i * 10) + 'px') regression.failures.push(style.width);
+    if (style.getPropertyValue('--unset').trim() !== '') regression.failures.push('unset');
+    if (style.getPropertyValue('--offset').trim() !== '0px') regression.failures.push('offset');
+    const expected = (regression.frames % 2) + i;
+    if (style.getPropertyValue('--universal').trim() !== String(expected)) regression.failures.push('universal');
+    regression.values[i] = style.getPropertyValue('--universal').trim();
+  }
+  regression.frames++;
+  requestAnimationFrame(frame);
+}
+requestAnimationFrame(frame);
+</script>

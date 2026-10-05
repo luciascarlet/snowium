@@ -22,3 +22,11 @@ No GitHub remote, hosted repository or published release was created. No origina
 - The local rebuilt framework and the installed target framework both match SHA-256 `307cb83473b28ce98fc02396d6eaa3abfbfeef17022999361d7ff6d2068b7486`.
 - The release exports the font source fix and enhanced gfx regression. Source/patch checks and independent ZIP verification are run before publication. Native font/browser tests are retained results from the crash-fix work, not new tests performed by hosted CI.
 - Separate renderer assertions involving CSS custom properties remain unresolved. The short fixture test does not establish extended browsing stability.
+
+## Third preview — pass40 style-cache fix
+
+- Retained native records reproduced the previous renderer crashes in `style_resolver.cc:1646` on lucia.red and `style_resolver.cc:2524` in the reduced custom-property fixture. The mismatch involved identical computed values represented by distinct token-data objects.
+- With the fix, the 30-second fixture test advanced animation frames and preserved dynamically mutated universal values, unset values and inherited widths with no regression failures. The 45-second website observation passed. Screen Sharing records cover homepage rendering, Works navigation, scrolling and context menus.
+- ChatGPT's login form rendered, but cold JavaScript module compilation caused minutes-long stalls, Page Unresponsive and temporary blank content. Full authentication and extended stability remain unverified.
+- Release preparation checks all 159 local app files against the retained target deployment provenance. The installed target framework was rechecked against SHA-256 `9fe7701d07c4be2aeb728a821a88e7f3109147af6cd7eb8e1c177a82841a3730`.
+- Source export includes the new style fix, regression fixture and observer, plus the updated native font-probe expectations from the prior fix. Native test results come from the crash-fix records; packaging and hosted integrity checks do not perform native UI tests.

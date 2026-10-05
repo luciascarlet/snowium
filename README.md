@@ -8,13 +8,15 @@ Download the ZIP from a GitHub Release, extract it, and double-click `Chromium.a
 
 The default profile is `~/Library/Application Support/Snowium124`; its keychain service is `Snowium124 Safe Storage`. It is separate from Chromium 60. Only x86_64 and 10.6.8 have been tested; this is not a PowerPC or 32-bit build.
 
-The current candidate is **pass39**, released as `v124.0.6367.207-sl.2`. It repairs the Lucida Grande font fallback crash while drawing tab titles. Native gfx font and missing-glyph tab-title regressions passed on 10.6.8. Native testing covered Wikipedia search/article navigation, context menus, scrolling and GitHub profile rendering. Writable shared-memory round trips also passed inside the actual renderer sandbox. Long browsing sessions, downloads, extensions, printing and media have not been comprehensively tested. Performance is slow and rendering uses software paths. This is Chromium 124 with compatibility changes, not a current Chromium security update.
+The current candidate is **pass40**, released as `v124.0.6367.207-sl.3`. It fixes the CSS custom-property style-cache crash while retaining style assertions, and includes the earlier Lucida Grande font fallback fix. The custom-property animation/SVG regression and website tests passed on 10.6.8. Earlier native tests covered Wikipedia search/article navigation, context menus, scrolling, GitHub profile rendering and sandboxed writable-memory round trips.
+
+Rendering uses software paths and performance can be slow. ChatGPT can spend several minutes compiling JavaScript, show Page Unresponsive and temporarily blank its content; full authentication is unverified. Long sessions, downloads, extensions, printing and media have not been comprehensively tested. This is a compatibility preview based on Chromium 124, not a current Chromium security update.
 
 ## Source and CI
 
 Read [BUILDING.md](BUILDING.md) for the source/build record. The hosted `Checks` workflow verifies source hashes and Python/shell syntax on pushes and pull requests. The hosted `Verify release assets` workflow verifies downloadable files after a release is published. These are integrity checks, not Chromium builds or target-machine UI tests. No self-hosted Mac runner is needed.
 
-The current app is packaged as a **one-off prebuilt release** in the ignored `release-assets/v124.0.6367.207-sl.2/` directory. See [PUBLISHING.md](PUBLISHING.md) for uploading it and [RELEASE-NOTES.md](RELEASE-NOTES.md) for the release description. Downloads are available from [GitHub Releases](https://github.com/luciascarlet/snowium/releases).
+The current app is packaged as a **one-off prebuilt release** in the ignored `release-assets/v124.0.6367.207-sl.3/` directory. See [PUBLISHING.md](PUBLISHING.md) for uploading it and [RELEASE-NOTES.md](RELEASE-NOTES.md) for the release description. Downloads are available from [GitHub Releases](https://github.com/luciascarlet/snowium/releases).
 
 The repository retains the source patch, overlays, pinned Legacy changes and runtime sources. It excludes the large Chromium checkout, SDKs, toolchains and build output. A tested clean-machine rebuild is still future work; the existing release can be hosted independently of that work.
 

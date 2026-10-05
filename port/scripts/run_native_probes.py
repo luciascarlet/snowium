@@ -42,6 +42,9 @@ PROBES = {
         'Mach creation preserves requested queue limit and one send right': 1,
         'Chromium 124 read-only Mach shared-memory mapping': 1}),
     'font_smoke': (30, {
+        'gfx Lucida Grande cascade retains and derives Lucida Grande': 1,
+        'gfx Helvetica cascade retains and derives Lucida Grande': 1,
+        'gfx Arial cascade retains and derives Lucida Grande': 1,
         'Skia custom RGB and native system pattern color conversion': 1,
         'Helvetica Skia glyph rasterization:': 1,
         'Times Skia glyph rasterization:': 1,
