@@ -1,0 +1,77 @@
+diff --git a/crypto/fipsmodule/rand/internal.h b/crypto/fipsmodule/rand/internal.h
+index 91bbe58973..c880a9ccfc 100644
+--- a/crypto/fipsmodule/rand/internal.h
++++ b/crypto/fipsmodule/rand/internal.h
+@@ -40,7 +40,7 @@ extern "C" {
+ #else
+ // By default if you are integrating BoringSSL we expect you to
+ // provide getentropy from the <unistd.h> header file.
+-#define OPENSSL_RAND_GETENTROPY
++#define OPENSSL_RAND_URANDOM
+ #endif
+ 
+ // RAND_bytes_with_additional_data samples from the RNG after mixing 32 bytes
+diff --git a/crypto/fipsmodule/rand/urandom.c b/crypto/fipsmodule/rand/urandom.c
+index 66ad8734b4..2deeac3d5e 100644
+--- a/crypto/fipsmodule/rand/urandom.c
++++ b/crypto/fipsmodule/rand/urandom.c
+@@ -58,6 +58,16 @@
+ #endif
+ #endif  // OPENSSL_LINUX
+ 
++#if defined(OPENSSL_MACOS)
++#include <sys/random.h>
++#endif
++
++#if defined(OPENSSL_FREEBSD) && __FreeBSD__ >= 12
++// getrandom is supported in FreeBSD 12 and up.
++#define FREEBSD_GETRANDOM
++#include <sys/random.h>
++#endif
++
+ #include <openssl/thread.h>
+ #include <openssl/mem.h>
+ 
+@@ -163,6 +173,20 @@ static void init_once(void) {
+   }
+ #endif  // USE_NR_getrandom
+ 
++#if defined(OPENSSL_MACOS)
++  // getentropy is available in macOS 10.12 and up. iOS 10 and up may also
++  // support it, but the header is missing. See https://crbug.com/boringssl/287.
++  if (__builtin_available(macos 10.12, *)) {
++    *urandom_fd_bss_get() = kHaveGetrandom;
++    return;
++  }
++#endif
++
++#if defined(FREEBSD_GETRANDOM)
++  *urandom_fd_bss_get() = kHaveGetrandom;
++  return;
++#endif
++
+   // FIPS builds must support getrandom.
+   //
+   // Historically, only Android FIPS builds required getrandom, while Linux FIPS
+@@ -274,6 +298,21 @@ static int fill_with_entropy(uint8_t *out, size_t len, int block, int seed) {
+     if (*urandom_fd_bss_get() == kHaveGetrandom) {
+ #if defined(USE_NR_getrandom)
+       r = boringssl_getrandom(out, len, getrandom_flags);
++#elif defined(FREEBSD_GETRANDOM)
++      r = getrandom(out, len, getrandom_flags);
++#elif defined(OPENSSL_MACOS)
++      if (__builtin_available(macos 10.12, *)) {
++        // |getentropy| can only request 256 bytes at a time.
++        size_t todo = len <= 256 ? len : 256;
++        if (getentropy(out, todo) != 0) {
++          r = -1;
++        } else {
++          r = (ssize_t)todo;
++        }
++      } else {
++        fprintf(stderr, "urandom fd corrupt.\n");
++        abort();
++      }
+ #else  // USE_NR_getrandom
+       fprintf(stderr, "urandom fd corrupt.\n");
+       abort();

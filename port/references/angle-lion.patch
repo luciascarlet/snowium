@@ -1,0 +1,90 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 834b7072032..410eb66d13f 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -344,7 +344,6 @@ config("extra_warnings") {
+       "-Wparentheses",
+       "-Wrange-loop-analysis",
+       "-Wstrict-prototypes",
+-      "-Wunreachable-code-aggressive",
+       "-Wshorten-64-to-32",
+     ]
+   }
+@@ -530,7 +529,7 @@ template("angle_common_lib") {
+     }
+ 
+     if (is_apple) {
+-      frameworks = [ "Metal.framework" ]
++      weak_frameworks = [ "Metal.framework" ]
+     }
+   }
+ }
+diff --git a/src/libANGLE/Program.h b/src/libANGLE/Program.h
+index c85daac20c8..b24075c0f0c 100644
+--- a/src/libANGLE/Program.h
++++ b/src/libANGLE/Program.h
+@@ -452,7 +452,10 @@ class Program final : public LabeledObject, public angle::Subject
+         return mState.getFragmentOutputIndexes();
+     }
+ 
+-    bool needsSync() { return !mOptionalLinkTasks.empty(); }
++    bool needsSync()
++    {
++        return !mOptionalLinkTasks.empty() || mState.getExecutable().hasAnyDirtyBit();
++    }
+     angle::Result syncState(const Context *context);
+ 
+     // Try to resolve linking. Inlined to make sure its overhead is as low as possible.
+diff --git a/src/libANGLE/renderer/driver_utils_mac.mm b/src/libANGLE/renderer/driver_utils_mac.mm
+index a81ede22594..731c89a27f2 100644
+--- a/src/libANGLE/renderer/driver_utils_mac.mm
++++ b/src/libANGLE/renderer/driver_utils_mac.mm
+@@ -17,12 +17,17 @@
+ OSVersion GetMacOSVersion()
+ {
+     OSVersion result;
+-
+-    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+-    result.majorVersion              = static_cast<int>(version.majorVersion);
+-    result.minorVersion              = static_cast<int>(version.minorVersion);
+-    result.patchVersion              = static_cast<int>(version.patchVersion);
+-
++    if (@available(macOS 10.10, *)) {
++      NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
++      result.majorVersion              = static_cast<int>(version.majorVersion);
++      result.minorVersion              = static_cast<int>(version.minorVersion);
++      result.patchVersion              = static_cast<int>(version.patchVersion);
++    } else {
++      extern OSErr Gestalt(OSType selector, SInt32 *response) __attribute__((weak_import, weak));
++      ::Gestalt(gestaltSystemVersionMajor, reinterpret_cast<SInt32*>(&result.majorVersion));
++      ::Gestalt(gestaltSystemVersionMinor, reinterpret_cast<SInt32*>(&result.minorVersion));
++      ::Gestalt(gestaltSystemVersionBugFix, reinterpret_cast<SInt32*>(&result.patchVersion));
++    }
+     return result;
+ }
+ #endif
+diff --git a/src/libANGLE/renderer/metal/BUILD.gn b/src/libANGLE/renderer/metal/BUILD.gn
+index 96e9ee84208..6ff5cd25d0b 100644
+--- a/src/libANGLE/renderer/metal/BUILD.gn
++++ b/src/libANGLE/renderer/metal/BUILD.gn
+@@ -141,6 +141,7 @@ angle_source_set("angle_metal_backend") {
+     frameworks = [
+       "IOSurface.framework",
+       "QuartzCore.framework",
++      "CoreServices.framework",
+     ]
+     if (is_mac) {
+       frameworks += [ "Cocoa.framework" ]
+diff --git a/src/libANGLE/renderer/metal/mtl_resources.mm b/src/libANGLE/renderer/metal/mtl_resources.mm
+index 1a16ccf79c8..f72ccde6702 100644
+--- a/src/libANGLE/renderer/metal/mtl_resources.mm
++++ b/src/libANGLE/renderer/metal/mtl_resources.mm
+@@ -997,7 +997,7 @@ bool needMultisampleColorFormatShaderReadWorkaround(ContextMtl *context, MTLText
+         }
+         return MTLStorageModeShared;
+     }
+-    if (contextMtl->getMetalDevice().hasUnifiedMemory() ||
++    if ((@available(macOS 10.15, iOS 13.0, *)) && contextMtl->getMetalDevice().hasUnifiedMemory() ||
+         features.alwaysUseSharedStorageModeForBuffers.enabled)
+     {
+         return MTLStorageModeShared;

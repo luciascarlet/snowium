@@ -1,0 +1,34 @@
+# Source and build record
+
+The initial release is a **prebuilt pass38 candidate**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
+
+The working app was built on Apple Silicon with Xcode 27.1, Chromium's pinned host compiler, MacPorts Clang 19.1.7 for x86_64 compilation, modified SDK 14.5 headers, original SDK 10.6 audio link stubs, bundled libc++/libc++abi, PLWeakCompatibility, MacPorts LegacySupport and an emulated-TLS Rust standard library. The app targets Intel OS X 10.6.8.
+
+The current app is optimized: `is_debug=false`, `-O2`, and debug symbol levels are zero. Its “Developer Build” label comes from `is_official_build=false`. Additional `DCHECK` diagnostics remain enabled; PGO and ThinLTO are disabled. Their performance impact has not been measured.
+
+The source export retains the Snow Leopard patch, overlays, runtime sources, build scripts, pinned Chromium Legacy dependency patches and restoration metadata. The Snow Leopard patch applies to stock Chromium 124.0.6367.207 **after** the Legacy patches recorded in `port/references/legacy-124-pins.json`. `port/overlay/` supplies new files. `source-manifest.json` records the hashes of these exported inputs.
+
+This is not a tested clean-machine bootstrap. The toolchain/SDK modifications, custom runtime archives and emulated-TLS Rust standard library currently require a separately prepared environment. Historical runtime READMEs describe the investigation and commands. Retaining this source export allows future work on automated builds without keeping the entire local build tree in Git.
+
+On the original provisioned workspace, the browser was built with:
+
+```sh
+SNOWIUM_JOBS=21 modern-port/scripts/build.sh chrome
+```
+
+The exported `prepare-link-stubs.py` takes `SNOWIUM_LEGACY_SDK` as the original 10.6 SDK path rather than relying on the adjacent Chromium 60 port. The exported scripts are references for a future provisioned build; hosted CI does not execute them.
+
+## One-off release
+
+`release-assets/` holds the already prepared ZIP, checksums and manifest. This directory is ignored by Git; attach its files as GitHub Release assets. The release ZIP includes all browser files, licenses and generated Chromium dependency credits. Extract and double-click `Chromium.app`.
+
+To regenerate the package on the modern Mac:
+
+```sh
+python3 ci/package.py \
+  --app /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/Chromium.app \
+  --credits /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/gen/components/resources/about_credits.html \
+  --version 124.0.6367.207-sl.1 --output release-assets
+```
+
+Use a fresh output directory; packaging refuses to overwrite assets. To upload after creating/pushing a GitHub repository, follow [PUBLISHING.md](PUBLISHING.md). Nothing has been published by this preparation.

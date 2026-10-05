@@ -1,0 +1,12 @@
+diff --git a/src/Reactor/LLVMJIT.cpp b/src/Reactor/LLVMJIT.cpp
+index d3dbdb987e..77dd286156 100644
+--- a/src/Reactor/LLVMJIT.cpp
++++ b/src/Reactor/LLVMJIT.cpp
+@@ -551,7 +551,6 @@ class ExternalSymbolGenerator : public llvm::orc::JITDylib::DefinitionGenerator
+ 			functions.try_emplace("memset", reinterpret_cast<void *>(memset));
+ 
+ #ifdef __APPLE__
+-			functions.try_emplace("__sincosf_stret", reinterpret_cast<void *>(__sincosf_stret));
+ #elif defined(__linux__)
+ 			functions.try_emplace("sincosf", reinterpret_cast<void *>(sincosf));
+ #elif defined(_WIN64)

@@ -1,0 +1,110 @@
+[
+  {
+    "repository": "https://github.com/blueboxd/angle",
+    "upstream_124_pin": "c67f290ef0f0433acb766c024d28c6f59f48b909",
+    "legacy_pin": "f297ac4c456aaab1cfce95eeb27a911401666d6b",
+    "merge_base": "c67f290ef0f0433acb766c024d28c6f59f48b909",
+    "status": "ahead",
+    "patch": "angle-lion.patch",
+    "patch_sha256": "59c0db5e0f640ecdf506642e2201b35c3207af6f0b31f35d566374fa5fd8156f",
+    "patch_file_count": 5,
+    "head_date": "2024-05-14T15:05:49Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/boringssl",
+    "upstream_124_pin": "4fa4804c8ab4521079af62dba5260a99c34b8a29",
+    "legacy_pin": "506420cb78be4d3e28c4805edaa9ac1829624b2a",
+    "merge_base": "4fa4804c8ab4521079af62dba5260a99c34b8a29",
+    "status": "ahead",
+    "patch": "boringssl-lion.patch",
+    "patch_sha256": "afcf19380678616769e7f3e7450b482c0a2c26eae9609bfad3defdb6ef76c357",
+    "patch_file_count": 2,
+    "head_date": "2024-05-14T15:10:37Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/chromium-legacy",
+    "upstream_124_pin": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "legacy_pin": "647f7a9e3fd71ac45324676d3bb19b159e2d1629",
+    "merge_base": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "status": "ahead",
+    "patch": "chromium-legacy-lion.patch",
+    "patch_sha256": "818f1f16e2fdda9ed3d95286ac8e97d7b648a0a9c5c950ecf198df87c7df18fe",
+    "patch_file_count": 474,
+    "head_date": "2024-05-15T07:14:36Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/dawn",
+    "upstream_124_pin": "394edde38c9323f7c910e3bdec9b7efc4ee39379",
+    "legacy_pin": "421d1983c28efe13bca0b93335bdb158e89686ab",
+    "merge_base": "394edde38c9323f7c910e3bdec9b7efc4ee39379",
+    "status": "ahead",
+    "patch": "dawn-lion.patch",
+    "patch_sha256": "368f6f8ecb3126018a5052085c0ed0aeeea8a4c204b67239c49ee37982e3a63b",
+    "patch_file_count": 3,
+    "head_date": "2024-05-14T15:03:10Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/libcxx",
+    "upstream_124_pin": "80307e66e74bae927fb8709a549859e777e3bf0b",
+    "legacy_pin": "ce8d30a46a8ff282f4d1f21b364f32da81c20fb9",
+    "merge_base": "80307e66e74bae927fb8709a549859e777e3bf0b",
+    "status": "ahead",
+    "patch": "libcxx-lion.patch",
+    "patch_sha256": "ab94f014e2871650a9ce33f5cd3465ee1035d3b300a804256d71e36ca187c0a4",
+    "patch_file_count": 1,
+    "head_date": "2024-05-14T15:10:15Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/skia",
+    "upstream_124_pin": "e2ea2eb3e0d37fff47968dfaaa337debb3b75b1e",
+    "legacy_pin": "f3a956c4a2ce50261d0033ee9cfc3919970c3f75",
+    "merge_base": "e2ea2eb3e0d37fff47968dfaaa337debb3b75b1e",
+    "status": "ahead",
+    "patch": "skia-lion.patch",
+    "patch_sha256": "cbbe34d827bb1042b5c7f2bb042d2e03db7539725d9c957c145775a0e9bf0591",
+    "patch_file_count": 11,
+    "head_date": "2024-05-14T15:07:25Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/swiftshader",
+    "upstream_124_pin": "bbe6452b420c5ddc4b0fd421b0a3ce271262f4ca",
+    "legacy_pin": "6ac7076b1b0977adf394241c7c178a8f6f1317b0",
+    "merge_base": "9e96423f7ed2c22eea3274e3f4c20dd5ca80a18c",
+    "status": "diverged",
+    "patch": "swiftshader-lion.patch",
+    "patch_sha256": "174b12b75550e1d9f4615c6cf83967aedc66e05cc761b1cfd70e356c1cdc20dd",
+    "patch_file_count": 1,
+    "head_date": "2022-10-28T04:12:35Z",
+    "note": "Apply compatibility patch to the 124 DEPS source; do not check out the obsolete 2022 fork head wholesale."
+  },
+  {
+    "repository": "https://github.com/blueboxd/vulkan_memory_allocator",
+    "upstream_124_pin": "56300b29fbfcc693ee6609ddad3fdd5b7a449a21",
+    "legacy_pin": "7d4301b4f92f3f770b307ad3fac743cea2a44701",
+    "merge_base": "56300b29fbfcc693ee6609ddad3fdd5b7a449a21",
+    "status": "ahead",
+    "patch": "vulkan_memory_allocator-lion.patch",
+    "patch_sha256": "7a9a0721b085cac896894ffbe64eeab4d2cfc7086e24dbe0b15b4d1637009dd5",
+    "patch_file_count": 1,
+    "head_date": "2023-10-12T04:19:37Z",
+    "note": ""
+  },
+  {
+    "repository": "https://github.com/blueboxd/webrtc",
+    "upstream_124_pin": "a55ff9e83e4592010969d428bee656bace8cbc3b",
+    "legacy_pin": "d637deffe3c77791685e986998cb9d98c63988bb",
+    "merge_base": "a55ff9e83e4592010969d428bee656bace8cbc3b",
+    "status": "ahead",
+    "patch": "webrtc-lion.patch",
+    "patch_sha256": "2e9e97de8a92100bb023568d2144804b13f6f1307fe25b446ff1dbabbabdc655",
+    "patch_file_count": 2,
+    "head_date": "2024-05-25T08:24:56Z",
+    "note": ""
+  }
+]

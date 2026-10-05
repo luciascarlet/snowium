@@ -1,0 +1,116 @@
+diff --git a/src/dawn/common/SystemUtils_mac.mm b/src/dawn/common/SystemUtils_mac.mm
+index f8b42acbdd3..caa5f1ffccf 100644
+--- a/src/dawn/common/SystemUtils_mac.mm
++++ b/src/dawn/common/SystemUtils_mac.mm
+@@ -29,22 +29,44 @@
+ 
+ #include "dawn/common/Assert.h"
+ 
++#import <Foundation/Foundation.h>
+ #import <Foundation/NSProcessInfo.h>
+ 
+ namespace dawn {
+ 
+ void GetMacOSVersion(int32_t* majorVersion, int32_t* minorVersion) {
+-    NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
+-    DAWN_ASSERT(majorVersion != nullptr);
+-    *majorVersion = version.majorVersion;
+-    if (minorVersion != nullptr) {
++    if (@available(macOS 10.10, *)) {
++      NSOperatingSystemVersion version = [[NSProcessInfo processInfo] operatingSystemVersion];
++      DAWN_ASSERT(majorVersion != nullptr);
++      *majorVersion = version.majorVersion;
++      if (minorVersion != nullptr) {
+         *minorVersion = version.minorVersion;
++      }
++    } else {
++      extern OSErr Gestalt(OSType selector, SInt32 *response) __attribute__((weak_import, weak));
++      DAWN_ASSERT(majorVersion != nullptr);
++      ::Gestalt(gestaltSystemVersionMajor, reinterpret_cast<SInt32*>(&majorVersion));
++      if (minorVersion != nullptr) {
++        ::Gestalt(gestaltSystemVersionMinor, reinterpret_cast<SInt32*>(&minorVersion));
++      }
+     }
+ }
+ 
+ bool IsMacOSVersionAtLeast(uint32_t majorVersion, uint32_t minorVersion) {
+-    return
+-        [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:{majorVersion, minorVersion, 0}];
++    if (@available(macOS 10.10, *)) {
++      return
++          [NSProcessInfo.processInfo isOperatingSystemAtLeastVersion:{majorVersion, minorVersion, 0}];
++    } else {
++      int32_t curMajorVersion, curMinorVersion;
++      GetMacOSVersion(&curMajorVersion, &curMinorVersion);
++      if(curMajorVersion>majorVersion)
++          return true;
++      
++      if(curMajorVersion==majorVersion && curMinorVersion>=minorVersion)
++          return true;
++      
++      return false;
++    }
+ }
+ 
+ }  // namespace dawn
+diff --git a/src/dawn/native/metal/BackendMTL.mm b/src/dawn/native/metal/BackendMTL.mm
+index c4c8314fd8e..527599bd42b 100644
+--- a/src/dawn/native/metal/BackendMTL.mm
++++ b/src/dawn/native/metal/BackendMTL.mm
+@@ -280,7 +280,7 @@ bool CheckMetalValidationEnabled(InstanceBase* instance) {
+         mAdapterType = wgpu::AdapterType::IntegratedGPU;
+         const char* systemName = "iOS ";
+ #elif DAWN_PLATFORM_IS(MACOS)
+-        if ([*mDevice hasUnifiedMemory]) {
++        if ((@available(macOS 10.15, iOS 13.0, *)) && [*mDevice hasUnifiedMemory]) {
+             mAdapterType = wgpu::AdapterType::IntegratedGPU;
+         } else {
+             mAdapterType = wgpu::AdapterType::DiscreteGPU;
+@@ -922,7 +922,7 @@ FeatureValidationResult ValidateFeatureSupportedWithTogglesImpl(
+ 
+     void PopulateBackendProperties(UnpackedPtr<AdapterProperties>& properties) const override {
+         if (auto* memoryHeapProperties = properties.Get<AdapterPropertiesMemoryHeaps>()) {
+-            if ([*mDevice hasUnifiedMemory]) {
++            if ((@available(macOS 10.15, iOS 13.0, *)) && [*mDevice hasUnifiedMemory]) {
+                 auto* heapInfo = new MemoryHeapInfo[1];
+                 memoryHeapProperties->heapCount = 1;
+                 memoryHeapProperties->heapInfo = heapInfo;
+@@ -999,16 +999,18 @@ bool IsMetalValidationEnabled(PhysicalDeviceBase* physicalDevice) {
+     bool metalValidationEnabled = CheckMetalValidationEnabled(GetInstance());
+     @autoreleasepool {
+ #if DAWN_PLATFORM_IS(MACOS)
+-        for (id<MTLDevice> device in MTLCopyAllDevices()) {
+-            Ref<PhysicalDevice> physicalDevice = AcquireRef(
+-                new PhysicalDevice(GetInstance(), AcquireNSPRef(device), metalValidationEnabled));
+-            if (!GetInstance()->ConsumedErrorAndWarnOnce(physicalDevice->Initialize())) {
+-                mPhysicalDevices.push_back(std::move(physicalDevice));
++        if(@available(macOS 10.11,*)) {
++            for (id<MTLDevice> device in MTLCopyAllDevices()) {
++                Ref<PhysicalDevice> physicalDevice = AcquireRef(new PhysicalDevice(
++                    GetInstance(), AcquireNSPRef(device), metalValidationEnabled));
++                if (!GetInstance()->ConsumedErrorAndWarnOnce(physicalDevice->Initialize())) {
++                    mPhysicalDevices.push_back(std::move(physicalDevice));
++                }
+             }
+         }
+ #endif
+ 
+-        // iOS only has a single device so MTLCopyAllDevices doesn't exist there.
++            // iOS only has a single device so MTLCopyAllDevices doesn't exist there.
+ #if DAWN_PLATFORM_IS(IOS)
+         Ref<PhysicalDevice> physicalDevice = AcquireRef(new PhysicalDevice(
+             GetInstance(), AcquireNSPRef(MTLCreateSystemDefaultDevice()), metalValidationEnabled));
+diff --git a/src/dawn/tests/end2end/BindGroupTests.cpp b/src/dawn/tests/end2end/BindGroupTests.cpp
+index b88e7504e90..8233ee07792 100644
+--- a/src/dawn/tests/end2end/BindGroupTests.cpp
++++ b/src/dawn/tests/end2end/BindGroupTests.cpp
+@@ -1331,6 +1331,9 @@ TEST_P(BindGroupTests, DynamicBindingNoneVisibility) {
+ TEST_P(BindGroupTests, ArbitraryBindingNumbers) {
+     // TODO(crbug.com/dawn/736): Test output is wrong with D3D12 + WARP.
+     DAWN_SUPPRESS_TEST_IF(IsD3D12() && IsWARP());
++    // TODO(crbug.com/dawn/1617): VUID-vkUpdateDescriptorSets-None-03047 on UHD630
++    // driver 31.0.101.2111
++    DAWN_SUPPRESS_TEST_IF(IsWindows() && IsVulkan() && IsIntel());
+ 
+     utils::BasicRenderPass renderPass = utils::CreateBasicRenderPass(device, kRTSize, kRTSize);
+ 

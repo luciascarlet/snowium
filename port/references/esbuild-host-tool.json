@@ -1,0 +1,9 @@
+{
+  "package": "infra/3pp/tools/esbuild/mac-arm64",
+  "version": "version:2@0.14.13.chromium.2",
+  "source_pin": "third_party/devtools-frontend/src/DEPS",
+  "url": "https://chrome-infra-packages.appspot.com/dl/infra/3pp/tools/esbuild/mac-arm64/+/version:2@0.14.13.chromium.2",
+  "archive_sha256": "641006dcd3d93503b32886e34884e807c71bfcbbbc04285a4a92030006fe788d",
+  "binary_sha256": "d03b6a0e63a1e3ef4dc8ca382943fe8c93e5fecdc3e7e2db176a4a2e30d01c8c",
+  "original_sha256": "62a92e5023be71086ec4d8322a94e8a28775263501cf010dd06d9b7bd8db6a6b"
+}

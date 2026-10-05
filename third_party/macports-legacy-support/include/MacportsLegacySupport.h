@@ -1,0 +1,485 @@
+/*
+ * Copyright (c) 2018 Chris Jones <jonesc@macports.org>
+ * Copyright (c) 2019 Michael Dickens <michaelld@macports.org>
+ * Copyright (c) 2026 Frederick H. G. Wright II <fw@fwright.net>
+ *
+ * Permission to use, copy, modify, and distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+ */
+
+#ifndef _MACPORTS_LEGACYSUPPORTDEFS_H_
+#define _MACPORTS_LEGACYSUPPORTDEFS_H_
+
+/*
+ * Not needed directly -- #include <AvailabilityMacros.h>,
+ * but see <_macports_extras/sdkversion.h>
+ *
+ * NOTE: Not including AvailabilityMacros.h (directly or indirectly) here
+ * makes it safe to include this header before sdkversion.h.
+ */
+
+/* C++ extern definitions */
+#if defined(__cplusplus)
+#define	__MP__BEGIN_DECLS extern "C" {
+#define	__MP__END_DECLS	  }
+#else
+#define	__MP__BEGIN_DECLS
+#define	__MP__END_DECLS
+#endif
+
+/* foundational defs, used later */
+
+/* True for Apple-only i386 build */
+#if defined(__i386__) && __APPLE__
+#define __MPLS_APPLE_I386__            1
+#else
+#define __MPLS_APPLE_I386__            0
+#endif
+
+/* True for Apple-only x86 build */
+#if (defined(__i386__) || defined(__x86_64__)) && __APPLE__
+#define __MPLS_APPLE_X86__            1
+#else
+#define __MPLS_APPLE_X86__            0
+#endif
+
+/* True for 64-bit build */
+#if defined(__LP64__) && __LP64__
+#define __MPLS_64BIT 1
+#else
+#define __MPLS_64BIT 0
+#endif
+
+/* True for Apple-only ppc build */
+#if defined(__ppc__) && __APPLE__
+#define __MPLS_APPLE_PPC__            1
+#else
+#define __MPLS_APPLE_PPC__            0
+#endif
+
+/* True for Apple-only ppc64 build */
+#if defined(__ppc64__) && __APPLE__
+#define __MPLS_APPLE_PPC64__            1
+#else
+#define __MPLS_APPLE_PPC64__            0
+#endif
+
+/* Get __MPLS_TARGET_OSVER */
+#include <_macports_extras/targetos.h>
+
+/*
+ * Defines for when legacy support is required for various functions:
+ *
+ * In the general case, each feature flag should really be two feature
+ * flags, one referring to the SDK version and one referring to the target
+ * OS version.  These will typically both refer to the same OS version, but
+ * applied in different ways.
+ *
+ * If a given feature is implemented entirely in the headers, then only
+ * the SDK-based flag needs to exist.  In a few cases, a feature is
+ * implemented solely in the library without added header support,
+ * in which case the library flag exists without the SDK flag.
+ *
+ * Occasionally, a header-only macro-based feature may require only an
+ * #ifndef as a condition, in which case no feature flag is necessary.
+ *
+ * With rare exception, the tests shouldn't directly reference any of these
+ * flags at all, since the intent is that a test should behave the same
+ * regardless of whether the feature is provided by the OS or by this
+ * package.
+ *
+ * In the new naming scheme, the two flags for a given feature are named:
+ *    __MPLS_SDK_<feature>
+ *    __MPLS_LIB_<feature>
+ *
+ * The first flag is defined as a comparison on __MPLS_SDK_MAJOR,
+ * and files using it need to include sdkversion.h (as well as this one).
+ *
+ * The second flag is typically defined as a comparison on __MPLS_TARGET_OSVER,
+ * though in some cases the condition may be more complicated.
+ *
+ * In a few cases, a third flag is provided:
+ *    __MPLS_EMP_<feature>
+ *
+ * This only occurs when the provision of some feature is architecture-
+ * dependent.
+ *
+ * When the static library is built universally, and a module is empty for
+ * some architectures but not others, the mechanism for filtering out
+ * empty modules fails to avoid empty slices in non-empty modules, and
+ * ranlib reports "no symbols" warnings.  In such cases (only in universal
+ * builds), we add a dummy symbol to the otherwise empty slice.  The "EMP"
+ * config flag is typically defined with the same OS condition as the "LIB"
+ * flag, but with the complementary architecture condition.
+ *
+ * NOTE: At present, no attempt is made to correct the availability attributes
+ * of definitions obtained from the SDK.  When using an SDK matched to the
+ * target OS version, this is a non-issue, since any feature provided by
+ * that OS version would be shown as available in that OS version, and any
+ * feature not provided by the target OS would be declared/defined in our
+ * own headers with no availability attributes.  But if a build uses a later
+ * SDK for an OS version that provides the feature, then it would usually
+ * show as unavailable for any OS version where our own support is needed.
+ * This is likely to produce availability warnings when such warnings are
+ * enabled.  If any fix for this is possible, it would be likely to involve
+ * considerable effort to implement; hence the problem is ignored for now.
+ * That means that either building with "later" SDKs should be avoided, or
+ * both enabling availability warnings and treating warnings as errors
+ * should be avoided.
+ *
+ * ADDENDUM:  The availability issue is now corrected in a limited subset
+ * of cases.  See the comment in the Availability.h wrapper header.
+ *
+ * NOTE: When adding new features, be sure to respect __DARWIN_C_LEVEL in
+ * the relevant header(s) if applicable, and add appropriate test cases
+ * to manual_tests/darwin_c.c if so.
+ */
+
+/* Tracking Rosetta usage and bugs */
+#define __MPLS_LIB_ROSETTA1_HANDLING__       (__MPLS_TARGET_OSVER < 1070 \
+                                              && __MPLS_APPLE_PPC__)
+#define __MPLS_EMP_ROSETTA1_HANDLING__       (__MPLS_TARGET_OSVER < 1070 \
+                                              && !__MPLS_APPLE_PPC__)
+#define __MPLS_LIB_ROSETTA2_HANDLING__       0  /* Not yet active */
+
+/* fsgetpath */
+#define __MPLS_SDK_SUPPORT_FSGETPATH__        (__MPLS_SDK_MAJOR < 101300)
+#define __MPLS_LIB_SUPPORT_FSGETPATH__        (__MPLS_TARGET_OSVER < 101300)
+
+/* "at" calls, including fdopendir */
+#define __MPLS_SDK_SUPPORT_ATCALLS__          (__MPLS_SDK_MAJOR < 101000)
+#define __MPLS_LIB_SUPPORT_ATCALLS__          (__MPLS_TARGET_OSVER < 101000)
+
+/* setattrlistat */
+#define __MPLS_SDK_SUPPORT_SETATTRLISTAT__    (__MPLS_SDK_MAJOR < 101300)
+#define __MPLS_LIB_SUPPORT_SETATTRLISTAT__    (__MPLS_TARGET_OSVER < 101300)
+
+/* ** utimensat, futimens, UTIME_NOW, UTIME_OMIT */
+#define __MPLS_SDK_SUPPORT_UTIMENSAT__        (__MPLS_SDK_MAJOR < 101300)
+#define __MPLS_LIB_SUPPORT_UTIMENSAT__        (__MPLS_TARGET_OSVER < 101300)
+
+/* mkfifoat, mknodat */
+#define __MPLS_SDK_SUPPORT_MKFIFONODAT__      (__MPLS_SDK_MAJOR < 130000)
+#define __MPLS_LIB_SUPPORT_MKFIFONODAT__      (__MPLS_TARGET_OSVER < 130000)
+
+/* O_CLOEXEC option in open() - no SDK flag needed */
+#define __MPLS_LIB_SUPPORT_OPEN_CLOEXEC__     (__MPLS_TARGET_OSVER < 1070)
+
+/* mach_approximate_time */
+#define __MPLS_SDK_SUPPORT_APPROX_TIME__      (__MPLS_SDK_MAJOR < 101000)
+#define __MPLS_LIB_SUPPORT_APPROX_TIME__      (__MPLS_TARGET_OSVER < 101000)
+
+/* mach_continuous_time */
+#define __MPLS_SDK_SUPPORT_CONTINUOUS_TIME__  (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_CONTINUOUS_TIME__  (__MPLS_TARGET_OSVER < 101200)
+
+/* clock_gettime, clock_gettime_nsec_np */
+#define __MPLS_SDK_SUPPORT_GETTIME__          (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_GETTIME__          (__MPLS_TARGET_OSVER < 101200)
+
+/* timespec_get */
+#define __MPLS_SDK_SUPPORT_TIMESPEC_GET__     (__MPLS_SDK_MAJOR < 101500)
+#define __MPLS_LIB_SUPPORT_TIMESPEC_GET__     (__MPLS_TARGET_OSVER < 101500)
+
+/* Fix bugs in sysctl() and sysctlbyname() for boottime */
+#define __MPLS_LIB_FIX_64BIT_BOOTTIME__       (__MPLS_TARGET_OSVER < 1060 \
+                                               && __MPLS_64BIT)
+#define __MPLS_EMP_FIX_64BIT_BOOTTIME__       (__MPLS_TARGET_OSVER < 1060 \
+                                               && !__MPLS_64BIT)
+
+/* Fix bugs in certain 10.4 ppc64 calls */
+#define __MPLS_LIB_FIX_TIGER_PPC64__          (__MPLS_TARGET_OSVER < 1050 \
+                                               && __MPLS_APPLE_PPC64__)
+#define __MPLS_EMP_FIX_TIGER_PPC64__          (__MPLS_TARGET_OSVER < 1050 \
+                                               && !__MPLS_APPLE_PPC64__)
+
+/* new signature for scandir and alphasort */
+#define __MPLS_SDK_SUPPORT_NEW_SCANDIR__      (__MPLS_SDK_MAJOR < 1080)
+
+/* <net/if.h> include <sys/socket.h> */
+#define __MPLS_SDK_NETIF_SOCKET_FIX__         (__MPLS_SDK_MAJOR < 1090)
+
+/* Bad CMSG_DATA definition in <10.6 <sys/socket.h> */
+#define __MPLS_SDK_CMSG_DATA_FIX__            (__MPLS_SDK_MAJOR < 1060)
+
+/* Warning-prone CMSG_NXTHDR definition in some 10.4 <sys/socket.h>s */
+#define __MPLS_SDK_CMSG_NXTHDR_FIX__          (__MPLS_SDK_MAJOR < 1050 \
+                                               && __MPLS_64BIT)
+
+/* Byte-swapping failure in CMSG data with Rosetta */
+#define __MPLS_LIB_CMSG_ROSETTA_FIX__         __MPLS_LIB_ROSETTA1_HANDLING__
+
+/* Format confusion in CMSG timestamps, due to kernel bitness mismatch */
+#define __MPLS_LIB_CMSG_FORMAT_FIX__          (__MPLS_TARGET_OSVER < 1060 \
+                                               && __MPLS_64BIT)
+
+/* "Empty" version is limited to OSes supporting PPC */
+#define __MPLS_EMP_CMSG_FIX__                 (__MPLS_TARGET_OSVER < 1070 \
+                                               && !__MPLS_APPLE_PPC__)
+
+/* stpncpy */
+#define __MPLS_SDK_SUPPORT_STPNCPY__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_STPNCPY__          (__MPLS_TARGET_OSVER < 1070)
+
+/* strnlen */
+#define __MPLS_SDK_SUPPORT_STRNLEN__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_STRNLEN__          (__MPLS_TARGET_OSVER < 1070)
+
+/* strndup */
+#define __MPLS_SDK_SUPPORT_STRNDUP__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_STRNDUP__          (__MPLS_TARGET_OSVER < 1070)
+
+/* dprintf, vdprintf */
+#define __MPLS_SDK_SUPPORT_DPRINTF__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_DPRINTF__          (__MPLS_TARGET_OSVER < 1070)
+
+/* getline */
+#define __MPLS_SDK_SUPPORT_GETLINE__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_GETLINE__          (__MPLS_TARGET_OSVER < 1070)
+
+/* memmem */
+#define __MPLS_SDK_SUPPORT_MEMMEM__           (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_MEMMEM__           (__MPLS_TARGET_OSVER < 1070)
+
+/* wcsdup */
+#define __MPLS_SDK_SUPPORT_WCSDUP__           (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_WCSDUP__           (__MPLS_TARGET_OSVER < 1070)
+
+/* wcsnlen */
+#define __MPLS_SDK_SUPPORT_WCSNLEN__          (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_WCSNLEN__          (__MPLS_TARGET_OSVER < 1070)
+
+/* wcpcpy, wcpncpy */
+#define __MPLS_SDK_SUPPORT_WCPCPY__           (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_WCPCPY__           (__MPLS_TARGET_OSVER < 1070)
+
+/* wcsncasecmp_l, wcscasecmp_l, wcsncasecmp, wcscasecmp */
+#define __MPLS_SDK_SUPPORT_WCSCASECMP__       (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_WCSCASECMP__       (__MPLS_TARGET_OSVER < 1070)
+
+/* llround */
+#define __MPLS_SDK_SUPPORT_LLROUND__          (__MPLS_SDK_MAJOR < 1070)
+
+/* arc4random */
+#define __MPLS_SDK_SUPPORT_ARC4RANDOM__       (__MPLS_SDK_MAJOR < 1070)
+#define __MPLS_LIB_SUPPORT_ARC4RANDOM__       (__MPLS_TARGET_OSVER < 1070)
+
+/* getentropy */
+#define __MPLS_SDK_SUPPORT_GETENTROPY__       (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_GETENTROPY__       (__MPLS_TARGET_OSVER < 101200)
+
+/* posix_memalign does not exist on < 10.6 */
+#define __MPLS_SDK_SUPPORT_POSIX_MEMALIGN__   (__MPLS_SDK_MAJOR < 1060)
+#define __MPLS_LIB_SUPPORT_POSIX_MEMALIGN__   (__MPLS_TARGET_OSVER < 1060)
+
+/* aligned_alloc does not exist on < 10.15 */
+#define __MPLS_SDK_SUPPORT_ALIGNED_ALLOC__    (__MPLS_SDK_MAJOR < 101500)
+#define __MPLS_LIB_SUPPORT_ALIGNED_ALLOC__    (__MPLS_TARGET_OSVER < 101500)
+
+/* AI_NUMERICSERV does not exist on < 10.6 */
+/* The addition uses an #ifndef, so no feature flag is necessary */
+
+/*  realpath() on < 10.6 does not support modern NULL buffer usage */
+#define __MPLS_LIB_SUPPORT_REALPATH_ALLOC__   (__MPLS_TARGET_OSVER < 1060)
+
+/* Also, 10.6 non-POSIX realpath() (32-bit only) with a nonexistent path and
+ * a NULL buffer returns an unsafe pointer to an internal buffer. */
+#define __MPLS_LIB_SUPPORT_REALPATH_NONEX_FIX__ (__MPLS_TARGET_OSVER >= 1060 \
+                                                 && __MPLS_TARGET_OSVER < 1070 \
+                                                 && !__MPLS_64BIT)
+#define __MPLS_EMP_SUPPORT_REALPATH_NONEX_FIX__ (__MPLS_TARGET_OSVER >= 1060 \
+                                                 && __MPLS_TARGET_OSVER < 1070 \
+                                                 && __MPLS_64BIT)
+
+/* fgetattrlist, fsetattrlist */
+#define __MPLS_SDK_SUPPORT_FXETATTRLIST__     (__MPLS_SDK_MAJOR < 1060)
+#define __MPLS_LIB_SUPPORT_FXETATTRLIST__     (__MPLS_TARGET_OSVER < 1060)
+
+/* Bugfix for [f]setattrlist() */
+#define __MPLS_LIB_FIX_SETATTRLIST__          (__MPLS_TARGET_OSVER < 1080 \
+                                               && __MPLS_TARGET_OSVER >= 1050)
+
+/* localtime_r, gmtime_r, etc only declared on Tiger when _ANSI_SOURCE and _POSIX_C_SOURCE are undefined */
+#define __MPLS_SDK_SUPPORT_TIME_THREAD_SAFE_FUNCTIONS__  (__MPLS_SDK_MAJOR < 1050)
+
+/* lchmod does not exist on Tiger */
+#define __MPLS_SDK_SUPPORT_LCHMOD__           (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_LCHMOD__           (__MPLS_TARGET_OSVER < 1050)
+
+/* lutimes does not exist on Tiger */
+#define __MPLS_SDK_SUPPORT_LUTIMES__          (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_LUTIMES__          (__MPLS_TARGET_OSVER < 1050)
+
+/* sys/aio.h header needs adjustment to match newer SDKs */
+#define __MPLS_SDK_SYS_AIO_TIGER_FIX__        (__MPLS_SDK_MAJOR < 1050)
+
+/*  sysconf() is missing some functions on some systems, and may misbehave on i386 */
+#define __MPLS_SDK_SUPPORT_SYSCONF_NPROCESSORS__  (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_SYSCONF_NPROCESSORS__  (__MPLS_TARGET_OSVER < 1050)
+
+#define __MPLS_SDK_SUPPORT_SYSCONF_PHYS_PAGES__   (__MPLS_SDK_MAJOR < 101100)
+#define __MPLS_LIB_SUPPORT_SYSCONF_PHYS_PAGES__   (__MPLS_TARGET_OSVER < 101100 \
+                                                   || !__MPLS_64BIT)
+#define __MPLS_EMP_SUPPORT_SYSCONF_PHYS_PAGES__   (__MPLS_TARGET_OSVER >= 101100 \
+                                                   && __MPLS_64BIT)
+
+#define __MPLS_LIB_SUPPORT_SYSCONF_WRAP__ (__MPLS_LIB_SUPPORT_SYSCONF_NPROCESSORS__ \
+                                           || __MPLS_LIB_SUPPORT_SYSCONF_PHYS_PAGES__)
+#define __MPLS_EMP_SUPPORT_SYSCONF_WRAP__ __MPLS_EMP_SUPPORT_SYSCONF_PHYS_PAGES__
+
+/* PTHREAD_RWLOCK_INITIALIZER is not defined until 10.5 */
+/* The addition uses an #ifndef, so no feature flag is necessary */
+
+/* Macros missing from some earlier versions of sys/queue.h */
+/* All additions use #ifndef, so no feature flags are necessary. */
+
+/* Missing until 10.5 */
+/* SLIST_HEAD_INITIALIZER, STAILQ_FOREACH */
+
+/* Missing until 10.7 */
+/* SLIST_REMOVE_AFTER */
+
+/* c++11 <cmath> PPC 10.[45] and Intel 10.[4-6], GNU g++ 4.6 through 8. */
+#if (__MPLS_TARGET_OSVER < 1070 \
+               && defined(__GNUC__) && (__GNUC__ <= 8)                 \
+               && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 6))))
+#define __MP_LEGACY_SUPPORT_CXX11_CMATH__ 1
+#else
+#define __MP_LEGACY_SUPPORT_CXX11_CMATH__ 0
+#endif
+
+/* sincos */
+#define __MPLS_SDK_SUPPORT_SINCOS__   (__MPLS_SDK_MAJOR < 1090)
+#define __MPLS_LIB_SUPPORT_SINCOS__   (__MPLS_TARGET_OSVER < 1090)
+
+/* exp10[f] */
+#define __MPLS_SDK_SUPPORT_EXP10__   (__MPLS_SDK_MAJOR < 1090)
+#define __MPLS_LIB_SUPPORT_EXP10__   (__MPLS_TARGET_OSVER < 1090)
+
+/* ffsl */
+#define __MPLS_SDK_SUPPORT_FFSL__     (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_FFSL__     (__MPLS_TARGET_OSVER < 1050)
+/* ffsll */
+#define __MPLS_SDK_SUPPORT_FFSLL__    (__MPLS_SDK_MAJOR < 1090)
+#define __MPLS_LIB_SUPPORT_FFSLL__    (__MPLS_TARGET_OSVER < 1090)
+
+/* fls */
+#define __MPLS_SDK_SUPPORT_FLS__      (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_FLS__      (__MPLS_TARGET_OSVER < 1050)
+/* flsl */
+#define __MPLS_SDK_SUPPORT_FLSL__     (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_FLSL__     (__MPLS_TARGET_OSVER < 1050)
+/* flsll */
+#define __MPLS_SDK_SUPPORT_FLSLL__    (__MPLS_SDK_MAJOR < 1090)
+#define __MPLS_LIB_SUPPORT_FLSLL__    (__MPLS_TARGET_OSVER < 1090)
+
+/* open_memstream */
+#define __MPLS_SDK_SUPPORT_OPEN_MEMSTREAM__   (__MPLS_SDK_MAJOR < 101300)
+#define __MPLS_LIB_SUPPORT_OPEN_MEMSTREAM__   (__MPLS_TARGET_OSVER < 101300)
+
+/* fmemopen */
+#define __MPLS_SDK_SUPPORT_FMEMOPEN__   (__MPLS_SDK_MAJOR < 101300)
+#define __MPLS_LIB_SUPPORT_FMEMOPEN__   (__MPLS_TARGET_OSVER < 101300)
+
+/* pthread_setname_np */
+#define __MPLS_SDK_SUPPORT_PTHREAD_SETNAME_NP__   (__MPLS_SDK_MAJOR < 1060)
+#define __MPLS_LIB_SUPPORT_PTHREAD_SETNAME_NP__   (__MPLS_TARGET_OSVER < 1060)
+
+/* *stat() functions for 64-bit-inode variants (missing in 10.4) */
+#define __MPLS_SDK_SUPPORT_STAT64__      (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_STAT64__      (__MPLS_TARGET_OSVER < 1050)
+
+/* fstatx_np() and fchmodx_np() need byte-swap on 10.4 Rosetta */
+#define __MPLS_LIB_FIX_TIGER_ROSETTA__   (__MPLS_TARGET_OSVER < 1050 \
+                                          && __MPLS_APPLE_PPC__)
+
+/* [f]chmodx_np() malfunction on 10.4 */
+#define __MPLS_LIB_FIX_TIGER_CHMODX__    (__MPLS_TARGET_OSVER < 1050)
+
+/*
+ * pthread_[f]chdir_np(), avail as syscalls but not functions in 10.5-10.11
+ * No SDK provides prototypes for these functions, so the SDK flag here
+ * just indicates that it's plausible.
+ */
+#define __MPLS_SDK_SUPPORT_PTHREAD_CHDIR__ (__MPLS_SDK_MAJOR >= 1050)
+#define __MPLS_LIB_SUPPORT_PTHREAD_CHDIR__ (__MPLS_TARGET_OSVER < 101200 \
+                                            && __MPLS_TARGET_OSVER >= 1050)
+/* Also provide fake (failing) versions for 10.4 with 10.5+ SDK */
+#define __MPLS_LIB_FAKE_PTHREAD_CHDIR__    (__MPLS_TARGET_OSVER < 1050)
+
+/* Compound macros, bundling functionality needed by multiple single features. */
+#define __MPLS_LIB_SUPPORT_REALPATH_WRAP__ (__MPLS_LIB_SUPPORT_REALPATH_ALLOC__ \
+                                            || __MPLS_LIB_SUPPORT_REALPATH_NONEX_FIX__)
+
+/* UUIDs - for now, just add missing typedef statements */
+#define __MPLS_SDK_SUPPORT_UUID__  (__MPLS_SDK_MAJOR < 1060)
+
+/* for now, just forward call to CFPropertyListCreateWithStream */
+#define __MPLS_SDK_SUPPORT_CoreFoundation__  (__MPLS_SDK_MAJOR < 1060)
+
+/* Missing CFString prototype */
+#define __MPLS_SDK_SUPPORT_CFSTRING_NOCOPY__  (__MPLS_SDK_MAJOR < 1050)
+
+/* Missing CommonDigest macros */
+#define __MPLS_SDK_SUPPORT_COMMONDIGEST_ADDS__     (__MPLS_SDK_MAJOR < 1050)
+
+/* CommonDigest macros in "argless" 10.6+ style */
+#define __MPLS_SDK_SUPPORT_COMMONDIGEST_ARGLESS__  (__MPLS_SDK_MAJOR < 1060)
+
+/* CCRandomGenerateBytes */
+#define __MPLS_SDK_SUPPORT_CCRANDOM__       (__MPLS_SDK_MAJOR < 101000)
+#define __MPLS_LIB_SUPPORT_CCRANDOM__       (__MPLS_TARGET_OSVER < 101000)
+
+/* copyfile and its associated functions have gained functionality over the years */
+#define __MPLS_SDK_SUPPORT_COPYFILE_TIGER__ (__MPLS_SDK_MAJOR < 1050)
+#define __MPLS_LIB_SUPPORT_COPYFILE_TIGER__ (__MPLS_TARGET_OSVER < 1050)
+#define __MPLS_SDK_SUPPORT_COPYFILE_10_6__  (__MPLS_SDK_MAJOR < 1060)
+#define __MPLS_LIB_SUPPORT_COPYFILE_10_6__  (__MPLS_TARGET_OSVER < 1060)
+
+/* _tlv_atexit and __cxa_thread_atexit */
+#define __MPLS_LIB_SUPPORT_ATEXIT_WRAP__   (__MPLS_TARGET_OSVER < 1070)
+
+/* os_unfair_lock structure and its associated functions */
+#define __MPLS_SDK_SUPPORT_OS_UNFAIR_LOCK__   (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_OS_UNFAIR_LOCK__   (__MPLS_TARGET_OSVER < 101200)
+
+/* library symbol ___bzero */
+#define __MPLS_LIB_SUPPORT_SYMBOL____bzero__   (__MPLS_TARGET_OSVER < 1060)
+
+/* library symbol _dirfd */
+#define __MPLS_LIB_SUPPORT_SYMBOL__dirfd__   (__MPLS_TARGET_OSVER < 1080)
+
+/* fix bug in pthread_get_stacksize_np */
+/* see https://github.com/rust-lang/rust/issues/43347 */
+#define __MPLS_LIB_SUPPORT_PTHREAD_GET_STACKSIZE_NP_FIX__  (__MPLS_TARGET_OSVER < 1060 \
+                                                            || (__MPLS_TARGET_OSVER >= 1090 \
+                                                                && __MPLS_TARGET_OSVER < 101100))
+
+/* clonefile, clonefileat, fclonefileat */
+#define __MPLS_SDK_SUPPORT_CLONEFILE__       (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_CLONEFILE__       (__MPLS_TARGET_OSVER < 101200)
+
+/* mkostemp[s] */
+#define __MPLS_SDK_SUPPORT_MKOSTEMP__        (__MPLS_SDK_MAJOR < 101200)
+#define __MPLS_LIB_SUPPORT_MKOSTEMP__        (__MPLS_TARGET_OSVER < 101200)
+
+/* fix bug in 10.4 ppc64 signal handling */
+#define __MPLS_LIB_FIX_PPC64_SIGNALS__       (__MPLS_TARGET_OSVER < 1050 \
+                                              && __MPLS_APPLE_PPC64__)
+#define __MPLS_EMP_FIX_PPC64_SIGNALS__       (__MPLS_TARGET_OSVER < 1050 \
+                                              && !__MPLS_APPLE_PPC64__)
+
+/* __chkstk_darwin() compiler helper */
+#define __MPLS_LIB_SUPPORT_CHKSTK__          (__MPLS_TARGET_OSVER < 101400 \
+                                              && __MPLS_APPLE_X86__)
+
+#endif /* _MACPORTS_LEGACYSUPPORTDEFS_H_ */

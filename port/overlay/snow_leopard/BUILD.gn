@@ -1,0 +1,56 @@
+executable("runtime_smoke") {
+  sources = [ "runtime_smoke.cc" ]
+  configs -= [ "//build/config/compiler:no_exceptions" ]
+  configs += [ "//build/config/compiler:exceptions" ]
+}
+
+executable("seatbelt_smoke") {
+  sources = [ "seatbelt_smoke.cc" ]
+  deps = [ "//sandbox/mac:seatbelt", "//sandbox/mac:seatbelt_extension" ]
+}
+group("engine_tests") {
+  deps = [ ":runtime_smoke", ":seatbelt_smoke", "//v8:d8", "//base" ]
+}
+
+executable("foundation_smoke") {
+  sources = [ "foundation_smoke.cc" ]
+  deps = [ "//base", "//v8:v8_libbase" ]
+  include_dirs = [ "//v8" ]
+}
+
+source_set("cocoa_compat") {
+  sources = [ "cocoa_compat.mm" ]
+  configs -= [ "//build/config/compiler:enable_arc" ]
+  frameworks = [ "AppKit.framework", "ApplicationServices.framework" ]
+}
+
+executable("font_smoke") {
+  sources = [ "font_smoke.mm" ]
+  deps = [ "//skia", "//base", ":cocoa_compat" ]
+  configs -= [ "//build/config/compiler:enable_arc" ]
+  frameworks = [ "AppKit.framework", "ApplicationServices.framework" ]
+}
+
+source_set("system_compat") {
+  sources = [ "system_compat.cc", "system_compat.h" ]
+}
+
+executable("mojo_channel_smoke") {
+  sources = [ "mojo_channel_smoke.cc" ]
+  deps = [ "//mojo/core/embedder", "//mojo/public/cpp/platform" ]
+}
+
+executable("mach_rendezvous_smoke") {
+  sources = [ "mach_rendezvous_smoke.cc" ]
+  deps = [ "//base" ]
+}
+
+executable("net_https_smoke") {
+  sources = [ "net_https_smoke.cc" ]
+  deps = [ "//base", "//base:i18n", "//net" ]
+}
+
+executable("mojo_roundtrip_smoke") {
+  sources = [ "mojo_roundtrip_smoke.cc" ]
+  deps = [ "//base", "//mojo/core/embedder", "//mojo/public/cpp/platform", "//mojo/public/cpp/system", "//sandbox/mac:seatbelt" ]
+}

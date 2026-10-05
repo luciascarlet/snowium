@@ -1,0 +1,12 @@
+diff --git a/BUILD.gn b/BUILD.gn
+index 97aab3a..89a51ec 100644
+--- a/BUILD.gn
++++ b/BUILD.gn
+@@ -31,6 +31,7 @@ config("vulkan_memory_allocator_config") {
+     "VMA_DYNAMIC_VULKAN_FUNCTIONS=0",
+     "VMA_STATIC_VULKAN_FUNCTIONS=0",
+     "VMA_USE_STL_CONTAINERS=1",
++    "VMA_USE_STL_SHARED_MUTEX=0",
+   ]
+ }
+ 

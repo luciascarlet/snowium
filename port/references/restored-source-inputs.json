@@ -1,0 +1,110 @@
+[
+  {
+    "path": "content/test/data/web_ui_mojo_ts_test.ts",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_ts_test.ts?format=TEXT",
+    "sha256": "7a4cdb3d01b68156328ca2a11564dc02f86349cf50db717dc8da38a5319c512a"
+  },
+  {
+    "path": "content/test/data/web_ui_managed_interface_test.ts",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_managed_interface_test.ts?format=TEXT",
+    "sha256": "54d4ec17523e8e351d34e1d65c41078ee1bb6600509bb204370f2f0d7a099695"
+  },
+  {
+    "path": "content/test/data/web_ui_ts_test.test-mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_ts_test.test-mojom?format=TEXT",
+    "sha256": "cad75db971f53a12ed391a924763a0450c287d2dd3b38fa591a56c919373d3fa"
+  },
+  {
+    "path": "content/test/data/web_ui_ts_test_types.test-mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_ts_test_types.test-mojom?format=TEXT",
+    "sha256": "46362b8fa511087afa35ffe2549c94ed98d3947d7c7eadc2a525673d4e1b1e83"
+  },
+  {
+    "path": "content/test/data/web_ui_managed_interface_test.test-mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_managed_interface_test.test-mojom?format=TEXT",
+    "sha256": "1600506c5a91e97c377c5ab59dcd4fbe3023182f82ec863d5eb46f87a6bb9980"
+  },
+  {
+    "path": "content/test/data/mojo_bindings_web_test.test-mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/mojo_bindings_web_test.test-mojom?format=TEXT",
+    "sha256": "e989fc8572fcfd0428caf997075cee70cc52d787447cfceeb945e48af513acf8"
+  },
+  {
+    "path": "content/test/data/mojo_bindings_web_test_types.test-mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/mojo_bindings_web_test_types.test-mojom?format=TEXT",
+    "sha256": "373e88ea0d0679275fa4430bb0b159d796d2f85b3444e9e23a5bdf9ee18b0c18"
+  },
+  {
+    "path": "content/test/data/lite_js_test.mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/lite_js_test.mojom?format=TEXT",
+    "sha256": "bf7d9a3bd53e7b7b18f50fb2504275d7ba22b482964248c2425b6b7af29a28da"
+  },
+  {
+    "path": "content/test/data/mojo_web_test_helper_test.mojom",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/mojo_web_test_helper_test.mojom?format=TEXT",
+    "sha256": "bfdbf35c0f6ef2f59d3bbd533f00a27af56514189dfa17b7b7185d4d8df46259"
+  },
+  {
+    "path": "third_party/test_fonts/test_fonts",
+    "url": "https://storage.googleapis.com/chromium-fonts/336e775eec536b2d785cc80eff6ac39051931286",
+    "sha1": "336e775eec536b2d785cc80eff6ac39051931286"
+  },
+  {
+    "path": "ui/gl/resources/angle-metal",
+    "url": "https://chrome-infra-packages.appspot.com/dl/chromium/gpu/angle-metal-shader-libraries/+/S0FPOVKrgaiqyuR20SSHiPorLgYez29bfwEdKBobUMMC",
+    "version": "S0FPOVKrgaiqyuR20SSHiPorLgYez29bfwEdKBobUMMC",
+    "sha256": "4b414f3952ab81a8aacae476d1248788fa2b2e061ecf6f5b7f011d281a1b50c3"
+  },
+  {
+    "path": "third_party/google_toolbox_for_mac/src",
+    "url": "https://codeload.github.com/google/google-toolbox-for-mac/tar.gz/42b12f10cd8342f5cb41a1e3e3a2f13fd9943b0d",
+    "revision": "42b12f10cd8342f5cb41a1e3e3a2f13fd9943b0d",
+    "sha256": "e475d96e91d843ec993bb27dedfe18296f9d3ef4bac94707e6190bd483925354",
+    "restored_files": 242
+  },
+  {
+    "path": "content/test/data/web_ui_managed_interface_test.html",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_managed_interface_test.html?format=TEXT",
+    "sha256": "f5efa3a907acb4caa1a2a0e34abaf17e43887af92462b5bd04d8f0ced75db7e0"
+  },
+  {
+    "path": "content/test/data/web_ui_mojo_test.html",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_test.html?format=TEXT",
+    "sha256": "41b6eae6ddec26fa4123656932d71ae8a421b832a9b0d1abb7565ed9c012f2f7"
+  },
+  {
+    "path": "content/test/data/web_ui_mojo_test.js",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_test.js?format=TEXT",
+    "sha256": "44b4b8c14b6ba85a77a751fd38e4cdb5436f11c5fc46f15824f01dbf70544439"
+  },
+  {
+    "path": "content/test/data/web_ui_mojo_ts_test.html",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_ts_test.html?format=TEXT",
+    "sha256": "3f140b6641aede2c9de30c047b76f3db172a435dbbd9913e5026d5cdd6649f2b"
+  },
+  {
+    "path": "content/test/data/web_ui_mojo_native.html",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_native.html?format=TEXT",
+    "sha256": "48300221bf0e08afd8cf7cde2fc74b0e40d93f4c3e74bc27f54567e168fcabe8"
+  },
+  {
+    "path": "content/test/data/web_ui_mojo_native.js",
+    "revision": "a9001a6e39fbaa559510ca866052950457dd4e6b",
+    "url": "https://chromium.googlesource.com/chromium/src/+/a9001a6e39fbaa559510ca866052950457dd4e6b/content/test/data/web_ui_mojo_native.js?format=TEXT",
+    "sha256": "b8d1c0a49c7175a71a95bbc2866508c6b37040bcd9fe7d5cbff4aba0b33c3ac9"
+  }
+]

@@ -1,0 +1,23 @@
+# Snowium 124
+
+Chromium Legacy 124.0.6367.207.1 ported to **Intel Snow Leopard 10.6.8**. This repository contains the source patch, compatibility sources, native probes and release tooling. Chromium itself and the SDKs remain external build inputs.
+
+## Run
+
+Download the ZIP from a GitHub Release, extract it, and double-click `Chromium.app`. You can move the app to `/Applications`. No Terminal command, replacement system library, sandbox-disabling option or certificate override is required. Keep the complete app bundle together.
+
+The default profile is `~/Library/Application Support/Snowium124`; its keychain service is `Snowium124 Safe Storage`. It is separate from Chromium 60. Only x86_64 and 10.6.8 have been tested; this is not a PowerPC or 32-bit build.
+
+The initial candidate is **pass38**. Native testing covered Wikipedia search/article navigation, context menus, scrolling and GitHub profile rendering. Writable shared-memory round trips also passed inside the actual renderer sandbox. Long browsing sessions, downloads, extensions, printing and media have not been comprehensively tested. Performance is slow and rendering uses software paths. This is Chromium 124 with compatibility changes, not a current Chromium security update.
+
+## Source and CI
+
+Read [BUILDING.md](BUILDING.md) for the source/build record. The hosted `Checks` workflow verifies source hashes and Python/shell syntax on pushes and pull requests. The hosted `Verify release assets` workflow verifies downloadable files after a release is published. These are integrity checks, not Chromium builds or target-machine UI tests. No self-hosted Mac runner is needed.
+
+The current app is prepared as a **one-off prebuilt release** in the ignored `release-assets/` directory. See [PUBLISHING.md](PUBLISHING.md) for uploading it and [RELEASE-NOTES.md](RELEASE-NOTES.md) for the release description. No GitHub repository or release has been created yet.
+
+The repository retains the source patch, overlays, pinned Legacy changes and runtime sources. It excludes the large Chromium checkout, SDKs, toolchains and build output. A tested clean-machine rebuild is still future work; the existing release can be hosted independently of that work.
+
+## Credits
+
+Based on [Chromium](https://chromium.googlesource.com/chromium/src/) and [Chromium Legacy](https://github.com/blueboxd/chromium-legacy), with PLWeakCompatibility, LLVM/compiler-rt and MacPorts LegacySupport. See [NOTICE.md](NOTICE.md), `licenses/`, source notices, and the generated `about_credits.html` shipped beside the app in each release. `chrome://credits` provides Chromium's in-app notices.

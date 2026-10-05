@@ -1,0 +1,5 @@
+snow_leopard_port = false
+if (is_mac) {
+  import("//build/config/mac/mac_sdk.gni")
+  snow_leopard_port = current_cpu == "x64" && mac_deployment_target == "10.6"
+}

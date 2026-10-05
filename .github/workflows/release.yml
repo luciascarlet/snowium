@@ -1,0 +1,21 @@
+name: Verify release assets
+on:
+  release:
+    types: [published]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Download release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release download "$RELEASE_TAG" --dir dist --pattern '*.zip' --pattern '*.manifest.json' --pattern SHA256SUMS
+      - name: Verify checksums and app contents
+        run: python3 ci/verify_release.py dist

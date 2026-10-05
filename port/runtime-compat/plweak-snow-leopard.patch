@@ -1,0 +1,137 @@
+--- PLWeakCompatibilityStubs.m
++++ PLWeakCompatibilityStubs.m
+@@ -10,6 +10,8 @@
+ 
+ #import <dlfcn.h>
+ #import <pthread.h>
++#import <dispatch/dispatch.h>
++#include <string.h>
+ 
+ // We need our own prototypes for some functions to avoid conflicts, so disable the ones from the header
+ #define object_getClass object_getClass_disabled_for_ARC_PLWeakCompatibilityStubs
+@@ -24,7 +26,9 @@
+ 
+ // MAZeroingWeakRef Support
+ static Class MAZWR = Nil;
+-static bool mazwrEnabled = true;
++// Use the implementation validated by this port even if another component
++// happens to load a class named MAZeroingWeakRef into the process.
++static bool mazwrEnabled = false;
+ static inline bool has_mazwr () {
+     if (!mazwrEnabled)
+         return false;
+@@ -54,7 +58,7 @@
+ }
+ 
+ // Runtime (or ARC compatibility) prototypes we use here.
+-PLObjectPtr objc_release(PLObjectPtr obj);
++void objc_release(PLObjectPtr obj);
+ PLObjectPtr objc_autorelease(PLObjectPtr obj);
+ PLObjectPtr objc_retain(PLObjectPtr obj);
+ Class object_getClass(PLObjectPtr obj);
+@@ -102,7 +106,10 @@
+ 
+ void objc_copyWeak(PLObjectPtr *to, PLObjectPtr *from) {
+     NEXT(objc_copyWeak, to, from);
+-    objc_initWeak(to, objc_loadWeak(from));
++    // A weak copy must not prolong the target until the autorelease pool drains.
++    PLObjectPtr retained = objc_loadWeakRetained(from);
++    objc_initWeak(to, retained);
++    objc_release(retained);
+ }
+ 
+ void objc_moveWeak(PLObjectPtr *to, PLObjectPtr *from) {
+@@ -115,20 +122,6 @@
+     NEXT(objc_loadWeak, location);
+     return objc_autorelease(objc_loadWeakRetained(location));
+ }
+-
+-PLObjectPtr objc_storeWeak(PLObjectPtr *location, PLObjectPtr obj) {
+-    NEXT(objc_storeWeak, location, obj);
+-
+-    PLUnregisterWeak(location);
+-
+-    *location = obj;
+-
+-    if (obj != nil)
+-        PLRegisterWeak(location, obj);
+-
+-    return obj;
+-}
+-
+ 
+ ////////////////////
+ #pragma mark Internal Globals and Prototypes
+@@ -176,6 +169,20 @@
+ static SEL releaseSELSwizzled;
+ static SEL deallocSEL;
+ static SEL deallocSELSwizzled;
++
++PLObjectPtr objc_storeWeak(PLObjectPtr *location, PLObjectPtr obj) {
++    NEXT(objc_storeWeak, location, obj);
++    WeakInit();
++    // Unregistration, slot replacement and registration must be one operation
++    // relative to weak loads and deallocation; the primitive helpers recurse.
++    pthread_mutex_lock(&gWeakMutex);
++    PLUnregisterWeak(location);
++    *location = obj;
++    if (obj != nil)
++        PLRegisterWeak(location, obj);
++    pthread_mutex_unlock(&gWeakMutex);
++    return obj;
++}
+ 
+ 
+ ////////////////////
+@@ -470,13 +477,22 @@
+  *
+  * @param obj the object to check
+  */
++static void EnsureClassDeallocationTrigger(Class c) {
++    if (CFSetContainsValue(gSwizzledClasses, (__bridge const void *)c))
++        return;
++
++    Swizzle(c, releaseSEL, releaseSELSwizzled, (IMP)SwizzledReleaseIMP);
++    Swizzle(c, deallocSEL, deallocSELSwizzled, (IMP)SwizzledDeallocIMP);
++
++    CFSetAddValue(gSwizzledClasses, (__bridge const void *)c);
++}
++
+ static void EnsureDeallocationTrigger(PLObjectPtr obj) {
+     Class c = object_getClass(obj);
+-    if (CFSetContainsValue(gSwizzledClasses, (__bridge const void *)c))
+-        return;
+-
+-    Swizzle(c, releaseSEL, releaseSELSwizzled, (IMP)SwizzledReleaseIMP);
+-    Swizzle(c, deallocSEL, deallocSELSwizzled, (IMP)SwizzledDeallocIMP);
+-
+-    CFSetAddValue(gSwizzledClasses, (__bridge const void *)c);
+-}
++    // Darwin 10 KVO restores the original isa after its last observer is
++    // removed. Hook that class too, otherwise a weak reference registered
++    // while observed outlives the only class with a deallocation trigger.
++    if (strncmp(class_getName(c), "NSKVONotifying_", 15) == 0)
++        EnsureClassDeallocationTrigger(class_getSuperclass(c));
++    EnsureClassDeallocationTrigger(c);
++}
+--- PLWeakCompatibilityStubs.h
++++ PLWeakCompatibilityStubs.h
+@@ -32,7 +32,7 @@
+ // Enable or disable the use of MAZeroingWeakRef. If enabled is YES, then
+ // MAZeroingWeakRef is used to implement the __weak functionality if present.
+ // If MAZWR is not present in your process, then it falls back to its simpler
+-// internal implementation. MAZWR use is enabled by default. Note that
++// internal implementation. MAZWR use is disabled by default in Snowium. Note that
+ // changing this value after weak references have been manipulated is
+ // extremely forbidden and will cause no end to havoc.
+ void PLWeakCompatibilitySetMAZWREnabled(BOOL enabled);
+@@ -40,7 +40,8 @@
+ // Check whether MAZeroingWeakRef is in use. Returns YES if and only if
+ // MAZeroingWeakRef is present in the process and its use is not disabled
+ // with the above function. Returns NO if MAZWR is not present or its
+-// use has been explicitly disabled.
++// use has been explicitly disabled. Snowium disables this optional path by
++// default because only the built-in implementation is validated by this port.
+ BOOL PLWeakCompatibilityHasMAZWR(void);
+ 
+ // Enable or disable the use of native fallthroughs to built-in runtime functions

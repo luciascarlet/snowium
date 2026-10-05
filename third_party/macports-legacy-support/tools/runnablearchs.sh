@@ -1,0 +1,95 @@
+#! /bin/sh
+
+# Script to determine which architectures can build and run on this machine.
+# The list of architectures to test can be specified on the command line;
+# the default is to test all primary architectures (or all potentially relevant
+# architectures if "-a" is given).  The final output is the filtered
+# architecture list.
+#
+# We need to verify that the program can actually run; not just that it built.
+#
+# Some gccs ignore unsupported -arch options, so we need to include a check
+# in the test program to verify the expected architecture.  But since there's
+# no '__ppc7400__' preprocessor macro, we need to map 'ppc7400' to 'ppc' while
+# doing this.
+#
+# Also, some gccs don't implement -arch at all, and treat it as an error.
+# This script won't work with such compilers.
+#
+# In addition, some MacPorts clangs segfault when given unsupported -arch
+# options, causing an error message from the shell rather than clang.  To get
+# around this, we wrap the entire compiler execution in another level of
+# shell, so that we can suppress the error message.
+#
+# Similarly, attempting to run an executable with an unsupported architecture
+# sometimes produces an error message from the shell, so we also wrap this
+# in another shell to allow suppressing the error message.
+#
+# Furthermore, attempts to run an arm64e executable (on arm64) fail with the
+# very nasty signal 9, so we also need to redirect the test program's own
+# stderr to hide that.
+#
+# In addition, the larval support for x86_64h on 10.9 considers x86_64h code
+# to be runnable on all x86_64 machines, including pre-Haswell.  To get around
+# that, in the x86_64h case, we include a use of the MOVBE instruction, which
+# is one of the instructions added by Haswell.  Running this on a pre-Haswell
+# CPU fails with an illegal instruction trap.
+#
+# Similarly, for the architecture 'ppc7400', we include a test AltiVec
+# instruction to verify that the machine is genuinely a G4.  The instruction
+# is just a fetch to v0 from the top of the stack.
+#
+# NOTE: Since AltiVec is required on 10.5+, and since Xcode maps ppc->ppc7400
+# on 10.5+, this tool will consider 'ppc' unrunnable under 10.5+ Rosetta when
+# AltiVec is disabled by 'novmx=1' in the boot-args.  This is unrelated
+# to the explicit AltiVec test.
+
+if [ "$1" != "-a" ]; then
+  TESTARCHS="${@:-ppc ppc64 i386 x86_64 arm64}"
+else
+  TESTARCHS="ppc ppc7400 ppc64 i386 x86_64 x86_64h arm arm64 arm64e"
+fi
+
+if [ "$CC" == "" ]; then CC=cc; fi
+
+TESTBIN="/tmp/testprog-$$"
+TESTSRC="${TESTBIN}.c"
+
+RUNARCHS=""
+for a in $TESTARCHS; do
+  if [ "$a" == "ppc7400" ]; then
+    archflag="ppc"
+    avtest="1"
+  else
+    archflag="$a"
+    avtest="0"
+  fi
+  cat >$TESTSRC <<EOD
+  int
+  main(int argc, char *argv[])
+  {
+    (void) argc; (void) argv;
+    #ifdef __${archflag}__
+      #ifdef __x86_64h__
+      __asm__ __volatile__ ("\tmovbe %%eax, %0\n" :: "m" (argc) : "eax");
+      #endif
+      #if ${avtest}
+      __asm__ __volatile__ ("\tlvx v0, 0, r1\n" ::);
+      #endif
+      return 0;
+    #else
+      return 1;
+    #endif
+  }
+EOD
+  rm -f $TESTBIN
+  if sh -c "$CC -arch $a $TESTSRC -o $TESTBIN 2>/dev/null" 2>/dev/null; then
+    if sh -c "$TESTBIN 2>/dev/null" 2>/dev/null; then
+      RUNARCHS="$RUNARCHS $a"
+    fi
+  fi;
+done
+
+rm -f $TESTSRC $TESTBIN
+
+echo $RUNARCHS
