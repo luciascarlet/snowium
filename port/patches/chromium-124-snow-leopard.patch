@@ -7592,14 +7592,34 @@
    // The macOS APIs can't reliably derive one font from another. That's why for
    // non-system fonts PlatformFontMac::DeriveFont() uses the family name of the
    // font to find look up new fonts from scratch, and why, for system fonts, it
-@@ -291,6 +298,7 @@
+@@ -291,9 +298,10 @@
    } else {
      return std::nullopt;
    }
+-}
+-
+-#if DCHECK_IS_ON()
 +#endif
- }
++}
++
++#if DCHECK_IS_ON() && !defined(SNOW_LEOPARD_PORT)
  
- #if DCHECK_IS_ON()
+ const std::set<std::string>& SystemFontNames() {
+   static const base::NoDestructor<std::set<std::string>> names([] {
+@@ -492,7 +500,12 @@
+     : ct_font_(ct_font, base::scoped_policy::RETAIN),
+       system_font_type_(system_font_type),
+       font_spec_(spec) {
+-#if DCHECK_IS_ON()
++  // Darwin 10 uses ordinary named fonts (Lucida Grande) for its system UI.
++  // CoreText also returns them in fallback cascades for other families. They
++  // can be retained and derived by family, unlike the opaque system UI fonts
++  // on newer macOS that require a SystemFontType. Keep the actual CTFont here
++  // so fallback glyph coverage, size and traits are preserved.
++#if DCHECK_IS_ON() && !defined(SNOW_LEOPARD_PORT)
+   DCHECK(system_font_type.has_value() ||
+          SystemFontNames().count(spec.name) == 0)
+       << "Do not pass a system font (" << spec.name << ") to PlatformFontMac; "
 --- a/ui/native_theme/BUILD.gn
 +++ b/ui/native_theme/BUILD.gn
 @@ -1,3 +1,5 @@

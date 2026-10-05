@@ -26,7 +26,7 @@ source_set("cocoa_compat") {
 
 executable("font_smoke") {
   sources = [ "font_smoke.mm" ]
-  deps = [ "//skia", "//base", ":cocoa_compat" ]
+  deps = [ "//skia", "//base", "//ui/gfx", ":cocoa_compat" ]
   configs -= [ "//build/config/compiler:enable_arc" ]
   frameworks = [ "AppKit.framework", "ApplicationServices.framework" ]
 }

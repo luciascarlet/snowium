@@ -1,9 +1,11 @@
-First preview of Snowium 124, based on Chromium Legacy 124.0.6367.207.1, for **Intel OS X 10.6.8**.
+Fixes a browser crash while drawing tab titles on **Intel OS X 10.6.8**. This is the pass39 build of Snowium, based on Chromium Legacy 124.0.6367.207.1.
 
-Download the ZIP, extract it, and double-click `Chromium.app`. You may move the app to `/Applications`. The app includes its compatibility libraries; no system-library replacement or special launch flags are required. Its profile is `~/Library/Application Support/Snowium124`, separate from Chromium 60.
+Snow Leopard's CoreText font fallback can return Lucida Grande, including for Helvetica and Arial. The previous build incorrectly rejected this named system font and aborted in `PlatformFontMac`/`GetFallbackFonts`. The fix accepts and retains the native font on Snow Leopard while preserving fallback ordering, glyph coverage, size and traits. The restriction remains on other platforms; other diagnostic checks remain enabled.
 
-This is the prebuilt **pass38** candidate tested on a MacBookPro6,1 running 10.6.8. Native testing covered Wikipedia search/article navigation, context menus, scrolling and GitHub profile rendering. The corrected writable-memory transport passed regression checks both normally and inside the renderer sandbox. The app now draws a Snow Leopard resize grip.
+The actual gfx font regression reproduced the crash before the fix and passed afterward on 10.6.8. A missing-glyph tab-title browser fixture crashed the old build after 13.61 seconds; the repaired build remained alive for the 30-second test and rendered its window. The release app matches the tested/deployed bundle.
 
-Rendering uses software paths and performance can be slow. Extended browsing stability, downloads, extensions, printing and media have not been comprehensively tested. This preview is based on Chromium 124; it is not an updated Chromium security release. The originally reported right-click crash was not conclusively traced to the repaired renderer disconnection, although subsequent tested context menus worked.
+Download the ZIP, extract it, and double-click `Chromium.app`. You may move it to `/Applications`. The profile remains `~/Library/Application Support/Snowium124`; existing profiles need not be removed. No special launch flags or replacement system libraries are required.
 
-Checksums and a manifest accompany the ZIP. Chromium dependency credits and supplemental runtime licenses are included. The source repository contains the port changes and pinned Legacy patches. This release was built locally before the GitHub workflows existed; CI verifies source and release integrity and does not rebuild the browser.
+Rendering still uses software paths and performance can be slow. Separate CSS custom-property renderer assertions remain unresolved, and extended browsing stability is not established. This is a compatibility preview based on Chromium 124, not a current Chromium security update.
+
+The ZIP includes dependency credits and runtime licenses; checksums and a file manifest accompany it. Source CI and release CI verify integrity, not a clean rebuild or native Snow Leopard UI behavior.

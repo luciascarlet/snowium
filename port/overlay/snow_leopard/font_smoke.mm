@@ -4,6 +4,8 @@
 #include <string.h>
 
 #include "skia/ext/skia_utils_mac.h"
+#include "ui/gfx/font.h"
+#include "ui/gfx/font_fallback.h"
 #include "third_party/skia/include/core/SkBitmap.h"
 #include "third_party/skia/include/core/SkCanvas.h"
 #include "third_party/skia/include/core/SkData.h"
@@ -199,6 +201,37 @@ static int CountInk(const SkBitmap& bitmap, int top, int bottom) {
 
 int main(int argc, char** argv) {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
+  // Exercise the exact gfx path that aborted while painting a tab title.
+  // Darwin 10's default cascade includes Lucida Grande even for Arial.
+  for (const char* family : {"Lucida Grande", "Helvetica", "Arial"}) {
+    gfx::Font original(family, 13);
+    const auto fallbacks = gfx::GetFallbackFonts(original);
+    bool found_system_family = false;
+    if (fallbacks.empty())
+      return 18;
+    for (const auto& fallback : fallbacks) {
+      if (!fallback.GetCTFont() || fallback.GetHeight() <= 0)
+        return 19;
+      if (fallback.GetActualFontName() == "Lucida Grande") {
+        found_system_family = true;
+        // Retain the original native font; deriving a named font still works.
+        gfx::Font roundtrip(fallback.GetCTFont());
+        if (roundtrip.GetCTFont() != fallback.GetCTFont() ||
+            roundtrip.GetActualFontName() != "Lucida Grande")
+          return 20;
+        for (int style : {gfx::Font::NORMAL, gfx::Font::ITALIC}) {
+          gfx::Font derived = fallback.Derive(2, style, gfx::Font::Weight::BOLD);
+          if (!derived.GetCTFont() || derived.GetHeight() <= 0 ||
+              derived.GetFontSize() != fallback.GetFontSize() + 2)
+            return 21;
+        }
+      }
+    }
+    if (!found_system_family)
+      return 22;
+    printf("PASS gfx %s cascade retains and derives Lucida Grande\n", family);
+  }
+
   const CGFloat rgba[] = {0.25, 0.5, 0.75, 0.625};
   NSColor* custom = [NSColor colorWithColorSpace:[NSColorSpace deviceRGBColorSpace]
                                     components:rgba count:4];

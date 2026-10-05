@@ -1,6 +1,6 @@
 # Source and build record
 
-The initial release is a **prebuilt pass38 candidate**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
+The current release is a **prebuilt pass39 font-fix candidate**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
 
 The working app was built on Apple Silicon with Xcode 27.1, Chromium's pinned host compiler, MacPorts Clang 19.1.7 for x86_64 compilation, modified SDK 14.5 headers, original SDK 10.6 audio link stubs, bundled libc++/libc++abi, PLWeakCompatibility, MacPorts LegacySupport and an emulated-TLS Rust standard library. The app targets Intel OS X 10.6.8.
 
@@ -28,7 +28,7 @@ To regenerate the package on the modern Mac:
 python3 ci/package.py \
   --app /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/Chromium.app \
   --credits /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/gen/components/resources/about_credits.html \
-  --version 124.0.6367.207-sl.1 --output release-assets
+  --version 124.0.6367.207-sl.2 --output release-assets/v124.0.6367.207-sl.2
 ```
 
-Use a fresh output directory; packaging refuses to overwrite assets. To upload after creating/pushing a GitHub repository, follow [PUBLISHING.md](PUBLISHING.md). Nothing has been published by this preparation.
+Use a fresh output directory; packaging refuses to overwrite assets. To upload after creating/pushing a GitHub repository, follow [PUBLISHING.md](PUBLISHING.md). Packaging alone does not publish a release.

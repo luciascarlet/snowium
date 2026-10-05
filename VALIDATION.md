@@ -13,3 +13,12 @@ Prepared ZIP SHA-256:
 ```
 
 No GitHub remote, hosted repository or published release was created. No original build inputs or Chromium 60 files were removed.
+
+## Second preview — pass39 font fix, 2026-10-05
+
+- The actual gfx fallback regression aborted before the fix and passed after it on 10.6.8 for Lucida Grande, Helvetica and Arial, including native font identity and derived bold/italic fonts.
+- A tab title containing missing glyphs caused pass38 to abort after 13.61 seconds with the reported GetFallbackFonts/PlatformFontMac stack. Pass39 remained alive throughout the 30-second fixture test, loaded the expected page and painted a native window.
+- The retained deployment provenance records 159 matching physical files and a passing ARC provider inventory for all nine bundled executables. Release preparation rechecked every local file against that provenance.
+- The local rebuilt framework and the installed target framework both match SHA-256 `307cb83473b28ce98fc02396d6eaa3abfbfeef17022999361d7ff6d2068b7486`.
+- The release exports the font source fix and enhanced gfx regression. Source/patch checks and independent ZIP verification are run before publication. Native font/browser tests are retained results from the crash-fix work, not new tests performed by hosted CI.
+- Separate renderer assertions involving CSS custom properties remain unresolved. The short fixture test does not establish extended browsing stability.
