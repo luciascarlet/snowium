@@ -4,18 +4,18 @@ This directory is the source repository. `release-assets/` contains the prebuilt
 
 1. Use the existing `luciascarlet/snowium` repository and its `origin` remote.
 2. Commit and push the source files from this directory. Add its GitHub URL as `origin`. Do not force-push over an existing repository.
-3. Create and push tag `v124.0.6367.207-sl.3` for that source commit.
-4. In GitHub's Releases page choose that tag, mark the release as a prerelease, and attach **all three** files from `release-assets/v124.0.6367.207-sl.3/`: the ZIP, its `.manifest.json` and `SHA256SUMS`. Use `RELEASE-NOTES.md` for the description. Save a draft, review it, then publish.
+3. Create and push tag `v124.0.6367.207-sl.4` for that source commit.
+4. In GitHub's Releases page choose that tag, mark the release as a prerelease, and attach **all three** files from `release-assets/v124.0.6367.207-sl.4/`: the ZIP, its `.manifest.json` and `SHA256SUMS`. Use `RELEASE-NOTES.md` for the description. Save a draft, review it, then publish.
 
 Alternatively, after the repository and tag are pushed, GitHub CLI can create the draft:
 
 ```sh
-gh release create v124.0.6367.207-sl.3 \
-  release-assets/v124.0.6367.207-sl.3/*.zip \
-  release-assets/v124.0.6367.207-sl.3/*.manifest.json \
-  release-assets/v124.0.6367.207-sl.3/SHA256SUMS \
+gh release create v124.0.6367.207-sl.4 \
+  release-assets/v124.0.6367.207-sl.4/*.zip \
+  release-assets/v124.0.6367.207-sl.4/*.manifest.json \
+  release-assets/v124.0.6367.207-sl.4/SHA256SUMS \
   --verify-tag --draft --prerelease \
-  --title 'Snowium 124 for Snow Leopard — CSS style-cache crash fix' \
+  --title 'Snowium 124 for Snow Leopard — optional native Mac interface' \
   --notes-file RELEASE-NOTES.md
 ```
 

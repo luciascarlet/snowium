@@ -1,7 +1,7 @@
 {
   "upstream": "124.0.6367.207",
   "legacy": "124.0.6367.207.1",
-  "candidate": "cocoa2010-native-ui-wip",
+  "candidate": "cocoa2010-native-ui-preview",
   "files": {
     "licenses/CHROMIUM": "368cca1106be99d39ecd32a38d8305585d802a475effb66380b91ffc9bcf709b",
     "licenses/GoogleToolboxForMac": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
