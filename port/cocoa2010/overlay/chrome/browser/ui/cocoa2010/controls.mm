@@ -272,13 +272,10 @@ NSGradient* Cocoa2010ToolbarGradient(BOOL active) { return ToolbarGradient(activ
 - (void)drawRect:(NSRect)dirtyRect {
   NSImage* image = self.cell.isHighlighted ? self.pressedImage :
       (((NSButtonCell*)self.cell).showsBorderOnlyWhileMouseInside ? self.normalImage : self.hoverImage);
-  // HoverCloseButton's image-only cell centers the PDF at its natural size.
-  // The 40x27 frame is a hit target, not the dimensions of the artwork.
-  NSSize size = image.size;
-  CGFloat scale = MIN(1, MIN(NSWidth(self.bounds)/size.width, NSHeight(self.bounds)/size.height));
-  size.width *= scale; size.height *= scale;
-  NSRect imageRect = NSMakeRect((NSWidth(self.bounds)-size.width)/2,
-      (NSHeight(self.bounds)-size.height)/2, size.width, size.height);
+  // Chromium 7 uses NSButtonCell's image placement. On 10.6 it aligns the
+  // original 30x26 PDF at (5,1) in this 40x27 hit target; arithmetic centering
+  // puts it at y=0.5 and filters the one-pixel edges across two rows.
+  NSRect imageRect = [self.cell imageRectForBounds:self.bounds];
   [image drawInRect:imageRect fromRect:NSZeroRect operation:NSCompositeSourceOver
       fraction:1 respectFlipped:YES hints:nil];
 }
@@ -436,12 +433,17 @@ NSGradient* Cocoa2010ToolbarGradient(BOOL active) { return ToolbarGradient(activ
   (void)keepAlive;
   id<Cocoa2010BrowserDelegate> delegate = self.browserDelegate;
   uintptr_t identity = self.data.identity;
-  self.dragging = YES;
+  // Chromium 7 selects and raises the tab before capturing its drag frame.
+  // Setting dragging first would suppress the selection's stacking update.
   [delegate activateTab:identity];
+  self.dragging = YES;
   Cocoa2010WindowController* dragController = self.stripController;
   NSPoint start = [self.window convertBaseToScreen:event.locationInWindow];
   NSRect original = self.frame;
   BOOL dragged = NO;
+  // Present the new stacking order before the nested loop waits for mouse up.
+  [self.window displayIfNeeded];
+  [CATransaction flush];
   for (;;) {
     NSEvent* next = [self.window nextEventMatchingMask:NSLeftMouseDraggedMask | NSLeftMouseUpMask
         untilDate:[NSDate distantFuture] inMode:NSEventTrackingRunLoopMode dequeue:YES];
@@ -704,7 +706,7 @@ NSGradient* Cocoa2010ToolbarGradient(BOOL active) { return ToolbarGradient(activ
     newTab.pressedImage = Image(resources, @"newtab_p.pdf");
     ((NSButtonCell*)newTab.cell).showsBorderOnlyWhileMouseInside = YES;
     _newTab = newTab;
-    _newTab.imagePosition = NSImageOnly; _newTab.imageScaling = NSImageScaleProportionallyDown;
+    _newTab.imagePosition = NSImageOnly; _newTab.imageScaling = NSImageScaleNone;
     _newTab.title = @""; _newTab.image = Image(resources, @"newtab.pdf"); _newTab.bordered = NO;
     _newTab.target = self; _newTab.tag = IDC_NEW_TAB; _newTab.action = @selector(command:);
     _newTab.toolTip = @"New tab"; [_tabStripView addSubview:_newTab];

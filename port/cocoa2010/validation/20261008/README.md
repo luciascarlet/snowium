@@ -62,3 +62,29 @@ With the core UI disabled, native address-field input also opened the existing V
 The application icon is the deliberate exception: the original Chromium 7 `app.icns` is a static bundle resource in both modes. Its SHA-256 in the final build matches the retained original: `aec07ce512c60270ba2bedf33a37bcbfcd5d6ae02effc03397b3bf92bd23eebe`.
 
 The final pass32 build compiled successfully and was copied into the isolated task bundle. Both experimental preferences were restored to Enabled. Source/overlay agreement, forward and reverse patch checks, repeated installer runs and repository integrity checks passed. No release package was produced. Aqua refresh delay during long main-thread tasks remains unresolved, as documented in the scrolling benchmarks.
+
+## New-tab image alignment
+
+The supplied 5:33:25 PM screenshot exposed a half-point vertical offset. The original Mac PDF is 30×26 points, while the button's hit frame is 40×27. Arithmetic centering placed the image at `(5,0.5)`, filtering its fine edges across adjacent rows. Chromium 7 lets its native `NSButtonCell` place the image. Decoding the original BrowserWindow.xib cell flags and asking the actual 10.6.8 cell for `imageRectForBounds:` returned `(5,1,30,26)` with `NSImageScaleNone`. The corrected port cell returns that same rectangle.
+
+Pass33 uses the native cell's image rectangle and natural-size setting for the original normal, hover and pressed PDFs. The artwork and polygon hit mask are unchanged. The build and repeated installer check passed, and native input in the updated task browser opened a tab successfully. These before/after crops were captured with Screen Sharing at Actual Size, which produces two host screenshot pixels per target point on the Retina host; they are visual comparison evidence rather than direct framebuffer color measurements.
+
+Before:
+
+![New-tab button before native alignment](newtab-alignment-before.png)
+
+After:
+
+![New-tab button after native alignment](newtab-alignment-after.png)
+
+## Tab foreground on mouse down
+
+The tab set its `dragging` state before activating Chromium's tab model. The synchronous selection snapshot changed its appearance, but `layoutTabs:` returned early while tracking, leaving the previous tab above it until mouse up. Chromium 7 fires its selection action before capturing the tab's frame and starting drag tracking. Pass34 restores that order and calls `displayIfNeeded` and `CATransaction flush` before waiting for the next event.
+
+Native Screen Sharing input reproduced the old mismatch: the third tab became selected, but the second tab's right slope remained above it until release. A capture during the corrected short press shows the newly selected second tab above its third-tab neighbor, with the same stacking after release. The test selections differ because remote drag positioning initially acted from the previous pointer location; positioning the pointer over the inactive tab before pressing avoided that transport issue. These crops establish the selection/stacking behavior, not pixel or timing parity with Chromium 7.
+
+![Selected tab behind its neighbor during the old press](tab-mousedown-before.png)
+
+![Selected tab above its neighbor during the corrected press](tab-mousedown-after.png)
+
+The pass34 build compiled and was deployed to the isolated task app with both saved UI preferences enabled. The fix stays within the flag-gated Cocoa tab class.
