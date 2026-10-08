@@ -1,0 +1,506 @@
+[
+  {
+    "run": "fonts-normal-clean-1",
+    "recording_seconds": 20.001504916,
+    "scroll_window_seconds": 1.875504,
+    "scroll_input_updates": 30,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 29,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 30,
+      "median": 32.036,
+      "p95": 43.56005,
+      "max": 55.666
+    },
+    "wheel_dispatch_ms": {
+      "count": 31,
+      "median": 16.939,
+      "p95": 61.702,
+      "max": 69.564
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 59,
+      "median": 27.512,
+      "p95": 57.56679999999999,
+      "max": 87.75
+    },
+    "draws_over_50ms": 9,
+    "draws_over_100ms": 0,
+    "scroll_reporter_states": {
+      "STATE_PRESENTED_ALL": 57,
+      "STATE_DROPPED": 26,
+      "STATE_PRESENTED_PARTIAL": 31,
+      "STATE_NO_UPDATE_DESIRED": 75
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 189
+    },
+    "main_tasks_over_50ms": 5,
+    "main_task_ms": {
+      "count": 306,
+      "median": 0.04,
+      "p95": 26.05575,
+      "max": 180.303
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 9,
+        "total_ms": 22.016000000000002
+      },
+      "Layout": {
+        "count": 3,
+        "total_ms": 31.268
+      },
+      "Paint": {
+        "count": 9,
+        "total_ms": 55.37700000000001
+      },
+      "PrePaint": {
+        "count": 88,
+        "total_ms": 55.657
+      },
+      "FunctionCall": {
+        "count": 346,
+        "total_ms": 700.4040000000003
+      },
+      "FireAnimationFrame": {
+        "count": 111,
+        "total_ms": 661.6279999999997
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.5906489999999991,
+      "renderer": 9.886584000000006,
+      "GPU": 2.183228999999997,
+      "storage.mojom.StorageService": 0.05051499999999998,
+      "network.mojom.NetworkService": 0.06971400000000028,
+      "tracing.mojom.TracingService": 0.2163320000000013
+    }
+  },
+  {
+    "run": "fonts-normal-clean-2",
+    "recording_seconds": 20.001081959,
+    "scroll_window_seconds": 1.851045,
+    "scroll_input_updates": 29,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 29,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 29,
+      "median": 35.932,
+      "p95": 55.78679999999997,
+      "max": 92.224
+    },
+    "wheel_dispatch_ms": {
+      "count": 30,
+      "median": 21.8745,
+      "p95": 59.170299999999955,
+      "max": 105.656
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 61,
+      "median": 24.557,
+      "p95": 61.31,
+      "max": 92.044
+    },
+    "draws_over_50ms": 9,
+    "draws_over_100ms": 0,
+    "scroll_reporter_states": {
+      "STATE_PRESENTED_ALL": 57,
+      "STATE_PRESENTED_PARTIAL": 30,
+      "STATE_DROPPED": 32,
+      "STATE_NO_UPDATE_DESIRED": 65
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 184
+    },
+    "main_tasks_over_50ms": 5,
+    "main_task_ms": {
+      "count": 309,
+      "median": 0.039,
+      "p95": 24.972599999999996,
+      "max": 215.4
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 10,
+        "total_ms": 25.028000000000002
+      },
+      "Layout": {
+        "count": 3,
+        "total_ms": 36.406
+      },
+      "Paint": {
+        "count": 10,
+        "total_ms": 49.318999999999996
+      },
+      "PrePaint": {
+        "count": 84,
+        "total_ms": 53.809000000000005
+      },
+      "FunctionCall": {
+        "count": 341,
+        "total_ms": 699.5349999999996
+      },
+      "FireAnimationFrame": {
+        "count": 107,
+        "total_ms": 657.3059999999997
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.5586580000000083,
+      "renderer": 9.490909999999962,
+      "GPU": 2.1695729999999998,
+      "storage.mojom.StorageService": 0.03940100000000002,
+      "network.mojom.NetworkService": 0.044714000000000365,
+      "tracing.mojom.TracingService": 0.20803499999999886
+    }
+  },
+  {
+    "run": "fonts-normal-clean-3",
+    "recording_seconds": 20.000985208,
+    "scroll_window_seconds": 3.407968,
+    "scroll_input_updates": 30,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 30,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 30,
+      "median": 32.935,
+      "p95": 46.53434999999998,
+      "max": 61.029
+    },
+    "wheel_dispatch_ms": {
+      "count": 31,
+      "median": 16.103,
+      "p95": 27.435000000000002,
+      "max": 72.13
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 68,
+      "median": 27.676000000000002,
+      "p95": 99.4042,
+      "max": 112.267
+    },
+    "draws_over_50ms": 30,
+    "draws_over_100ms": 3,
+    "scroll_reporter_states": {
+      "STATE_PRESENTED_ALL": 68,
+      "STATE_DROPPED": 18,
+      "STATE_PRESENTED_PARTIAL": 34,
+      "STATE_NO_UPDATE_DESIRED": 176
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 296
+    },
+    "main_tasks_over_50ms": 4,
+    "main_task_ms": {
+      "count": 493,
+      "median": 0.102,
+      "p95": 21.60639999999999,
+      "max": 113.057
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 13,
+        "total_ms": 27.894
+      },
+      "Layout": {
+        "count": 3,
+        "total_ms": 30.183
+      },
+      "Paint": {
+        "count": 14,
+        "total_ms": 40.477
+      },
+      "PrePaint": {
+        "count": 195,
+        "total_ms": 71.45699999999995
+      },
+      "FunctionCall": {
+        "count": 456,
+        "total_ms": 1023.6540000000008
+      },
+      "FireAnimationFrame": {
+        "count": 218,
+        "total_ms": 989.8050000000004
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.6204639999999984,
+      "renderer": 9.652273999999997,
+      "GPU": 2.2205880000000064,
+      "storage.mojom.StorageService": 0.041403999999999996,
+      "network.mojom.NetworkService": 0.04658099999999976,
+      "tracing.mojom.TracingService": 0.2108220000000003
+    }
+  },
+  {
+    "run": "fonts-synchronized-3",
+    "recording_seconds": 20.002084,
+    "scroll_window_seconds": 1.732733,
+    "scroll_input_updates": 30,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 24,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 30,
+      "median": 84.3095,
+      "p95": 163.73805,
+      "max": 166.688
+    },
+    "wheel_dispatch_ms": {
+      "count": 31,
+      "median": 2.846,
+      "p95": 17.892,
+      "max": 38.699
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 47,
+      "median": 29.792,
+      "p95": 77.69899999999996,
+      "max": 110.918
+    },
+    "draws_over_50ms": 10,
+    "draws_over_100ms": 1,
+    "scroll_reporter_states": {
+      "STATE_PRESENTED_ALL": 42,
+      "STATE_PRESENTED_PARTIAL": 39,
+      "STATE_DROPPED": 61,
+      "STATE_NO_UPDATE_DESIRED": 20
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 162
+    },
+    "main_tasks_over_50ms": 11,
+    "main_task_ms": {
+      "count": 253,
+      "median": 0.041,
+      "p95": 37.17259999999994,
+      "max": 124.664
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 13,
+        "total_ms": 37.989999999999995
+      },
+      "Layout": {
+        "count": 11,
+        "total_ms": 206.911
+      },
+      "Paint": {
+        "count": 10,
+        "total_ms": 99.473
+      },
+      "PrePaint": {
+        "count": 55,
+        "total_ms": 94.53999999999999
+      },
+      "FunctionCall": {
+        "count": 304,
+        "total_ms": 585.7540000000001
+      },
+      "FireAnimationFrame": {
+        "count": 65,
+        "total_ms": 529.2209999999999
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.6506439999999998,
+      "renderer": 13.108790000000003,
+      "GPU": 1.8900350000000001,
+      "network.mojom.NetworkService": 0.10744499999999979,
+      "storage.mojom.StorageService": 0.03761599999999998,
+      "tracing.mojom.TracingService": 0.21907100000000002
+    }
+  },
+  {
+    "run": "fonts-synchronized-4",
+    "recording_seconds": 20.001486500000002,
+    "scroll_window_seconds": 1.551528,
+    "scroll_input_updates": 29,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 26,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 30,
+      "median": 80.8775,
+      "p95": 146.48759999999993,
+      "max": 164.426
+    },
+    "wheel_dispatch_ms": {
+      "count": 31,
+      "median": 24.367,
+      "p95": 52.3035,
+      "max": 62.554
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 51,
+      "median": 29.837,
+      "p95": 53.9985,
+      "max": 67.665
+    },
+    "draws_over_50ms": 5,
+    "draws_over_100ms": 0,
+    "scroll_reporter_states": {
+      "STATE_PRESENTED_ALL": 39,
+      "STATE_PRESENTED_PARTIAL": 36,
+      "STATE_DROPPED": 27,
+      "STATE_NO_UPDATE_DESIRED": 52
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 154
+    },
+    "main_tasks_over_50ms": 5,
+    "main_task_ms": {
+      "count": 272,
+      "median": 0.0375,
+      "p95": 31.09255,
+      "max": 68.529
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 10,
+        "total_ms": 30.572
+      },
+      "Layout": {
+        "count": 4,
+        "total_ms": 18.076999999999998
+      },
+      "Paint": {
+        "count": 9,
+        "total_ms": 49.092
+      },
+      "PrePaint": {
+        "count": 59,
+        "total_ms": 34.175
+      },
+      "FunctionCall": {
+        "count": 296,
+        "total_ms": 594.5959999999998
+      },
+      "FireAnimationFrame": {
+        "count": 76,
+        "total_ms": 537.9749999999998
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.5655280000000005,
+      "renderer": 11.307436000000001,
+      "GPU": 1.7719510000000014,
+      "network.mojom.NetworkService": 0.0650959999999996,
+      "storage.mojom.StorageService": 0.04212199999999999,
+      "tracing.mojom.TracingService": 0.21405700000000039
+    }
+  },
+  {
+    "run": "fonts-synchronized-5",
+    "recording_seconds": 20.00285125,
+    "scroll_window_seconds": 1.476826,
+    "scroll_input_updates": 30,
+    "scroll_input_dy": 1200,
+    "main_scroll_notifications": 28,
+    "scroll_begin_reasons": [],
+    "aqua_paint_ms": {
+      "count": 0
+    },
+    "aqua_paint_total_ms": 0,
+    "scroll_latency_ms": {
+      "count": 30,
+      "median": 74.762,
+      "p95": 124.46944999999994,
+      "max": 137.129
+    },
+    "wheel_dispatch_ms": {
+      "count": 31,
+      "median": 19.082,
+      "p95": 59.623,
+      "max": 84.935
+    },
+    "unfinished_latency_events": {},
+    "draw_interval_ms": {
+      "count": 52,
+      "median": 30.232999999999997,
+      "p95": 50.3003,
+      "max": 67.312
+    },
+    "draws_over_50ms": 3,
+    "draws_over_100ms": 0,
+    "scroll_reporter_states": {
+      "STATE_DROPPED": 30,
+      "STATE_PRESENTED_PARTIAL": 36,
+      "STATE_PRESENTED_ALL": 43,
+      "STATE_NO_UPDATE_DESIRED": 46
+    },
+    "scroll_threads": {
+      "SCROLL_MAIN_THREAD": 155
+    },
+    "main_tasks_over_50ms": 5,
+    "main_task_ms": {
+      "count": 245,
+      "median": 0.032,
+      "p95": 33.05839999999997,
+      "max": 91.909
+    },
+    "main_timeline_during_scroll": {
+      "UpdateLayoutTree": {
+        "count": 10,
+        "total_ms": 33.634
+      },
+      "Layout": {
+        "count": 4,
+        "total_ms": 36.784000000000006
+      },
+      "Paint": {
+        "count": 10,
+        "total_ms": 53.135000000000005
+      },
+      "PrePaint": {
+        "count": 53,
+        "total_ms": 49.93899999999999
+      },
+      "FunctionCall": {
+        "count": 300,
+        "total_ms": 605.1959999999999
+      },
+      "FireAnimationFrame": {
+        "count": 73,
+        "total_ms": 560.3149999999999
+      }
+    },
+    "cpu_seconds_by_type": {
+      "browser": 0.5378290000000021,
+      "renderer": 9.355604999999994,
+      "GPU": 1.8125459999999993,
+      "network.mojom.NetworkService": 0.05153500000000033,
+      "storage.mojom.StorageService": 0.033494000000000024,
+      "tracing.mojom.TracingService": 0.20837599999999945
+    }
+  }
+]

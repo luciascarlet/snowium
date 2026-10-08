@@ -1,0 +1,125 @@
+{
+  "date": "2026-10-08",
+  "raw_traces_in_git": false,
+  "runs": [
+    {
+      "run": "simple-native-idle-3",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-native-idle-3/trace.json",
+      "trace_sha256": "46b0a96024c35b5733eca3286e2155b388e1f566c262419f3f979488277c723a",
+      "results_sha256": "22434073bfba519ab6be33af6859d4163ccc252c9a60620e93afdd9aae7ba2b9"
+    },
+    {
+      "run": "simple-native-idle-4",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-native-idle-4/trace.json",
+      "trace_sha256": "113f16b053ac0153e19401868f61314e3580d841b0e42637f8778bab9a02571e",
+      "results_sha256": "99bf0c87f76be1ffb8cceb4d72fe34f52ea8dc813d3548ac835ceb7da8e38c68"
+    },
+    {
+      "run": "simple-plain-idle-3",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-plain-idle-3/trace.json",
+      "trace_sha256": "58f40245d19006f453a7b8ad9a141434d64aaaa1fcc120e79a4bb990f5f3276e",
+      "results_sha256": "64ace4c594d4d58809d643a55d4296e18ede8e46d67e1140b85ee2531bdeec46"
+    },
+    {
+      "run": "simple-plain-idle-4",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-plain-idle-4/trace.json",
+      "trace_sha256": "e99e47edff7d5d354c56391a020fe74a212d4f9e4221b790675fa04ed9068c75",
+      "results_sha256": "e258485808d1cc3e18b6cc47fef8226b8d618cdd74b317906ab5372f97a8b4c3"
+    },
+    {
+      "run": "simple-native-busy-1",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-native-busy-1/trace.json",
+      "trace_sha256": "8af9d2c9a73edf53184dba926660a46dc573a6a1d8011d010cbb4a909bfbc7f0",
+      "results_sha256": "75c0b6ae9155086b20a51d63cab7f4a07ab82e34ff277ce4260dc127f4cfeba6"
+    },
+    {
+      "run": "simple-native-busy-2",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-native-busy-2/trace.json",
+      "trace_sha256": "16dd1efc077eeb3dddf342b6596db9dc9f009a1c8795c62b6d0192385a88a2e0",
+      "results_sha256": "16c7a2925fd2f5d65215975cc3a55ca93b9e7c2ca6eac347e68a663cb4feea21"
+    },
+    {
+      "run": "simple-plain-busy-2",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-plain-busy-2/trace.json",
+      "trace_sha256": "7153abeb9a35747ae0e164d7a1e15ed6e012aece4e21b447b447fef374e6f1c2",
+      "results_sha256": "2469e274bd17cca4eaa667c50907e4a2c42c55764ad0da15b9bfba5929bdbcf9"
+    },
+    {
+      "run": "simple-plain-busy-3",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/simple-plain-busy-3/trace.json",
+      "trace_sha256": "4de0408d4f5f5f4c6cb7e39bbf83a14ff57c236c3f8e5c0c72c45108bbbed4c5",
+      "results_sha256": "bba66de7ec24435932bb31dd628053911c1f499aa1a5d7a947eb43934eefe6b2"
+    },
+    {
+      "run": "fonts-reasons-1",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-reasons-1/trace.json",
+      "trace_sha256": "f240d631b25ca9c1e6239be716d1cf99972e8cf3d5d78090437292e5305c6797",
+      "results_sha256": "ca5c88b8385d0cf2df4b8a8d69e8044b43bf71fdb8417839d64224a3b635a934"
+    },
+    {
+      "run": "fonts-reasons-2",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-reasons-2/trace.json",
+      "trace_sha256": "18dd307380f8ad8f0a1b9ed3af9c3676741384eab4b2d8d4e986fcdad4b428a5",
+      "results_sha256": "dba825948b8c420033309277ab82c9cfd148df211b07aa44db1512fa08d44742"
+    },
+    {
+      "run": "fonts-new-content-1",
+      "build": "pass23",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-new-content-1/trace.json",
+      "trace_sha256": "195422a21b584dc9cee8832582430f5f0ad0b5026b68e004a1c231793be6a0f9",
+      "results_sha256": "038a2ff347ab6d48defc688d5fb1b11485c4330783e4a135ad592fffc214b66b"
+    },
+    {
+      "run": "fonts-normal-clean-1",
+      "build": "pass22",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-normal-clean-1/trace.json",
+      "trace_sha256": "3ed15cbc70ee1c9da4fb644091b0ec2a51870bbee908c498e1d73a8dc9e8b023",
+      "results_sha256": "7753bf813c41023dc66171fa7d5ba7ec2aea2f9962e415ff107d35dfe848c2c6"
+    },
+    {
+      "run": "fonts-normal-clean-2",
+      "build": "pass22",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-normal-clean-2/trace.json",
+      "trace_sha256": "08733b65522049369bd312d88e59cbef9466e2a50578563b3c66407ed7492de9",
+      "results_sha256": "dea5492d3a86b57f011ed5a718067711bd9624adc6e2d54ad24600b3e5022bff"
+    },
+    {
+      "run": "fonts-normal-clean-3",
+      "build": "pass22",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-normal-clean-3/trace.json",
+      "trace_sha256": "7b2b1e9f05138ebee5cb4b278a78f1f8bc01b3ec3979f1410a735d6805d07294",
+      "results_sha256": "93aa1e99a3f2cb6f2d239dd6d1a7c3e8d27e99fca892509919fb11e35496581a"
+    },
+    {
+      "run": "fonts-synchronized-3",
+      "build": "pass20-forced-main-rejected",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-synchronized-3/trace.json",
+      "trace_sha256": "8c8b0b428c71d27b04d83608f055e5d3256e93cb13b643587fa0f05e68a63302",
+      "results_sha256": "06697511ca4fb16870f65ad31b95908278007626af4568f8dbb913abc5cf54d3"
+    },
+    {
+      "run": "fonts-synchronized-4",
+      "build": "pass20-forced-main-rejected",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-synchronized-4/trace.json",
+      "trace_sha256": "489d48f1e881d88ea057bba3c8fe63c1a24cba95abd167a2ba5a49f2daef6411",
+      "results_sha256": "6a84b7c1bbaf7806f737b24e2ac31c405952d97c5255eebf1c058d000078d150"
+    },
+    {
+      "run": "fonts-synchronized-5",
+      "build": "pass20-forced-main-rejected",
+      "local_trace": "modern-port/benchmarks/cocoa2010-scroll/fonts-synchronized-5/trace.json",
+      "trace_sha256": "0e02d6b8f30df94a19d301eb62afb8fed9e3d49f174dbf885ebeac32b6cf0434",
+      "results_sha256": "bcecb798ed07758c415dd250ec7628b57a1a0326f6f3d971aede880614a68fb8"
+    }
+  ]
+}

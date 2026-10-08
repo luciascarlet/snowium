@@ -18,6 +18,10 @@ SNOWIUM_JOBS=21 modern-port/scripts/build.sh chrome
 
 The exported `prepare-link-stubs.py` takes `SNOWIUM_LEGACY_SDK` as the original 10.6 SDK path rather than relying on the adjacent Chromium 60 port. The exported scripts are references for a future provisioned build; hosted CI does not execute them.
 
+## Optional historical UI
+
+After the pinned Legacy and Snow Leopard patches and overlays are applied, `port/cocoa2010/install.py --source /path/to/chromium-124.0.6367.207` installs the optional Cocoa UI and Aqua scrollbar code. Build `chrome` with the existing toolchain. Both runtime flags default to disabled; the Chromium 7 application icon is unconditional. See [the feature record](port/cocoa2010/README.md) for the two independent flags, historical sources and target validation. This experiment has no release package.
+
 ## One-off release
 
 `release-assets/` holds the already prepared ZIP, checksums and manifest. This directory is ignored by Git; attach its files as GitHub Release assets. The release ZIP includes all browser files, licenses and generated Chromium dependency credits. Extract and double-click `Chromium.app`.

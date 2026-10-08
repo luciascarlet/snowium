@@ -1,0 +1,14 @@
+{
+  "version": "49.0.2623.112",
+  "purpose": "Retained legacy Mac non-overlay Carbon scrollbar geometry for the current Blink integration. Core browser Cocoa sources are separately pinned to Chromium 7.0.517.41.",
+  "files": {
+    "third_party/WebKit/Source/platform/scroll/ScrollbarThemeMacNonOverlayAPI.h": {
+      "url": "https://raw.githubusercontent.com/chromium/chromium/49.0.2623.112/third_party/WebKit/Source/platform/scroll/ScrollbarThemeMacNonOverlayAPI.h",
+      "sha256": "e5c559db8179d7980423a411b7d988720725925166766e7b0636adaba72c9c48"
+    },
+    "third_party/WebKit/Source/platform/scroll/ScrollbarThemeMacNonOverlayAPI.mm": {
+      "url": "https://raw.githubusercontent.com/chromium/chromium/49.0.2623.112/third_party/WebKit/Source/platform/scroll/ScrollbarThemeMacNonOverlayAPI.mm",
+      "sha256": "d7e754d56873bf4c722852fb4292b021a7e1f505dbfc01462f268b481e8137a2"
+    }
+  }
+}

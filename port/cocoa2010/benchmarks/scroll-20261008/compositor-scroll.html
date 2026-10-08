@@ -1,0 +1,35 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Compositor scrolling</title>
+<style>
+body { margin: 16px; font: 13px Helvetica, sans-serif; background: white; color: black; }
+button { margin: 0 6px 12px 0; }
+#scroller { height: 300px; overflow: auto; will-change: scroll-position;
+  contain: paint; border: 1px solid #888; background: white; }
+.row { height: 99px; border-bottom: 1px solid #ccc; padding-left: 8px; line-height: 30px; }
+</style>
+<button id="top">Top</button><button id="busy">Main-thread load: Off</button><button id="appearance">Appearance: Aqua</button>
+<div id="scroller"></div>
+<script>
+const scroller = document.getElementById('scroller');
+for (let i = 0; i < 100; ++i) {
+  const row = document.createElement('div');
+  row.className = 'row'; row.textContent = i * 100;
+  scroller.appendChild(row);
+}
+document.getElementById('top').onclick = () => { scroller.scrollTop = 0; };
+document.getElementById('appearance').onclick = function() {
+  const plain = scroller.style.scrollbarColor === '';
+  scroller.style.scrollbarColor = plain ? '#888 #eee' : '';
+  this.textContent = 'Appearance: ' + (plain ? 'Plain' : 'Aqua');
+};
+let timer;
+document.getElementById('busy').onclick = function() {
+  if (timer) { clearInterval(timer); timer = null; }
+  else timer = setInterval(() => {
+    const deadline = performance.now() + 100;
+    while (performance.now() < deadline) {}
+  }, 500);
+  this.textContent = 'Main-thread load: ' + (timer ? 'On' : 'Off');
+};
+</script>

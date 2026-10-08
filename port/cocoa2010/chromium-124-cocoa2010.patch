@@ -1,0 +1,1303 @@
+diff --git a/chrome/BUILD.gn b/chrome/BUILD.gn
+--- a/chrome/BUILD.gn
++++ b/chrome/BUILD.gn
+@@ -634,8 +634,58 @@
+   }
+ 
+   bundle_data("chrome_app_icon") {
+-    sources = [ "app/theme/$branding_path_component/mac/app.icns" ]
++    sources = [ "browser/ui/cocoa2010/resources/app.icns" ]
+     outputs = [ "{{bundle_resources_dir}}/{{source_file_part}}" ]
++  }
++
++  bundle_data("cocoa2010_resources") {
++    sources = [
++      "browser/ui/cocoa2010/resources/back_Template.pdf",
++      "browser/ui/cocoa2010/resources/bookmark_bar_folder_mac.png",
++      "browser/ui/cocoa2010/resources/chevron.png",
++      "browser/ui/cocoa2010/resources/blocked_cookies.png",
++      "browser/ui/cocoa2010/resources/blocked_images.png",
++      "browser/ui/cocoa2010/resources/blocked_plugins.png",
++      "browser/ui/cocoa2010/resources/blocked_popups.png",
++      "browser/ui/cocoa2010/resources/blocked_script.png",
++      "browser/ui/cocoa2010/resources/forward_Template.pdf",
++      "browser/ui/cocoa2010/resources/geolocation_allowed_locationbar_icon.png",
++      "browser/ui/cocoa2010/resources/geolocation_denied_locationbar_icon.png",
++      "browser/ui/cocoa2010/resources/geolocation_infobar_icon.png",
++      "browser/ui/cocoa2010/resources/home_Template.pdf",
++      "browser/ui/cocoa2010/resources/newtab.pdf",
++      "browser/ui/cocoa2010/resources/newtab.png",
++      "browser/ui/cocoa2010/resources/newtab_button_mask.png",
++      "browser/ui/cocoa2010/resources/newtab_h.pdf",
++      "browser/ui/cocoa2010/resources/newtab_h.png",
++      "browser/ui/cocoa2010/resources/newtab_p.pdf",
++      "browser/ui/cocoa2010/resources/newtab_p.png",
++      "browser/ui/cocoa2010/resources/omnibox_star.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_history.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_http.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_https_invalid.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_https_valid.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_https_warning.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_more.pdf",
++      "browser/ui/cocoa2010/resources/omnibox_search.pdf",
++      "browser/ui/cocoa2010/resources/pageinfo_bad.png",
++      "browser/ui/cocoa2010/resources/pageinfo_good.png",
++      "browser/ui/cocoa2010/resources/pageinfo_info.png",
++      "browser/ui/cocoa2010/resources/pageinfo_mixed.png",
++      "browser/ui/cocoa2010/resources/pageinfo_warning.png",
++      "browser/ui/cocoa2010/resources/reload_Template.pdf",
++      "browser/ui/cocoa2010/resources/star.pdf",
++      "browser/ui/cocoa2010/resources/star_lit.pdf",
++      "browser/ui/cocoa2010/resources/stop_Template.pdf",
++      "browser/ui/cocoa2010/resources/tab_close.png",
++      "browser/ui/cocoa2010/resources/tab_close_h.png",
++      "browser/ui/cocoa2010/resources/tab_close_mask.png",
++      "browser/ui/cocoa2010/resources/tab_close_p.png",
++      "browser/ui/cocoa2010/resources/tools_Template.pdf",
++      "browser/ui/cocoa2010/resources/throbber.png",
++      "browser/ui/cocoa2010/resources/throbber_waiting.png",
++    ]
++    outputs = [ "{{bundle_resources_dir}}/Cocoa2010/{{source_file_part}}" ]
+   }
+ 
+   bundle_data("chrome_resources") {
+@@ -647,6 +697,7 @@
+     outputs = [ "{{bundle_resources_dir}}/{{source_file_part}}" ]
+     public_deps = [
+       ":chrome_app_icon",
++      ":cocoa2010_resources",
+       ":chrome_app_strings",
+       "//components/policy:chrome_manifest_bundle",
+     ]
+diff --git a/chrome/browser/about_flags.cc b/chrome/browser/about_flags.cc
+--- a/chrome/browser/about_flags.cc
++++ b/chrome/browser/about_flags.cc
+@@ -11217,6 +11217,17 @@
+      STRING_VALUE_TYPE(ash::switches::kForestFeatureKey, "")},
+ #endif  // BUILDFLAG(IS_CHROMEOS_ASH)
+ 
++#if defined(SNOW_LEOPARD_PORT)
++    {"cocoa-2010-ui", "2010 UI (Experimental)",
++     "Use the experimental 2010 window, tabs, toolbar, address field and "
++     "bookmarks bar. Requires relaunch.",
++     kOsMac,
++     ENABLE_DISABLE_VALUE_TYPE("enable-cocoa-2010-ui", "disable-cocoa-2010-ui")},
++    {"aqua-scrollbars", "Aqua Scrollbars (Experimental)",
++     "Use native Aqua scrollbars. Requires relaunch.", kOsMac,
++     FEATURE_VALUE_TYPE(features::kAquaScrollbar)},
++#endif
++
+     // NOTE: Adding a new flag requires adding a corresponding entry to enum
+     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
+     // Histograms" in tools/metrics/histograms/README.md (run the
+diff --git a/chrome/browser/flag-metadata.json b/chrome/browser/flag-metadata.json
+--- a/chrome/browser/flag-metadata.json
++++ b/chrome/browser/flag-metadata.json
+@@ -245,6 +245,11 @@
+     "expiry_milestone": 125
+   },
+   {
++    "name": "aqua-scrollbars",
++    "owners": [ "//ui/native_theme/OWNERS" ],
++    "expiry_milestone": -1
++  },
++  {
+     "name": "arc-aaudio-mmap-low-latency",
+     "owners": [ "pteerapong@chromium.org", "chromeos-audio@google.com" ],
+     "expiry_milestone": 125
+@@ -1396,6 +1401,12 @@
+       "chenji@chromium.org"
+     ],
+     "expiry_milestone": 126
++  },
++  {
++    "name": "cocoa-2010-ui",
++    "owners": [ "//chrome/browser/ui/OWNERS" ],
++    // Snowium's persistent UI preference must survive Chromium flag expiry.
++    "expiry_milestone": -1
+   },
+   {
+     "name": "compose-text-selection",
+diff --git a/chrome/browser/flag-never-expire-list.json b/chrome/browser/flag-never-expire-list.json
+--- a/chrome/browser/flag-never-expire-list.json
++++ b/chrome/browser/flag-never-expire-list.json
+@@ -19,6 +19,7 @@
+   "allow-devtools-in-system-ui",
+   "allow-previews",
+   "always-enable-hdcp",
++  "aqua-scrollbars",
+   "arc-native-bridge-toggle",
+   "ash-debug-shortcuts",
+   "ash-enable-unified-desktop",
+@@ -26,6 +27,7 @@
+   "cellular-bypass-esim-installation-connectivity-check",
+   "cellular-use-second-euicc",
+   "chrome-labs",
++  "cocoa-2010-ui",
+   "dcheck-is-fatal",
+   "disable-accelerated-2d-canvas",
+   "disable-accelerated-mjpeg-decode",
+diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
+--- a/chrome/browser/ui/BUILD.gn
++++ b/chrome/browser/ui/BUILD.gn
+@@ -4510,6 +4510,15 @@
+       "views/eye_dropper/eye_dropper_view_mac.mm",
+       "views/frame/browser_frame_mac.h",
+       "views/frame/browser_frame_mac.mm",
++      "cocoa2010/browser_adapter.h",
++      "cocoa2010/browser_adapter.mm",
++      "cocoa2010/controls.h",
++      "cocoa2010/controls.mm",
++      "cocoa2010/omnibox_cell.mm",
++      "cocoa2010/omnibox_popup.h",
++      "cocoa2010/omnibox_popup.mm",
++      "cocoa2010/bookmark_bar.h",
++      "cocoa2010/bookmark_bar.mm",
+       "views/frame/browser_non_client_frame_view_factory_mac.mm",
+       "views/frame/browser_non_client_frame_view_mac.h",
+       "views/frame/browser_non_client_frame_view_mac.mm",
+diff --git a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+--- a/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
++++ b/chrome/browser/ui/toolbar/chrome_location_bar_model_delegate.cc
+@@ -15,6 +15,9 @@
+ #include "chrome/browser/search_engines/template_url_service_factory.h"
+ #include "chrome/browser/ssl/security_state_tab_helper.h"
+ #include "chrome/browser/ui/login/login_tab_helper.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
+ #include "chrome/common/pref_names.h"
+ #include "chrome/common/url_constants.h"
+ #include "components/google/core/common/google_util.h"
+@@ -75,6 +78,10 @@
+ }
+ 
+ bool ChromeLocationBarModelDelegate::ShouldPreventElision() {
++#if defined(SNOW_LEOPARD_PORT)
++  if (cocoa2010::EnabledByFlag())
++    return true;
++#endif
+   Profile* const profile = GetProfile();
+   if (profile &&
+       profile->GetPrefs()->GetBoolean(omnibox::kPreventUrlElisionsInOmnibox)) {
+diff --git a/chrome/browser/ui/views/bubble_anchor_util_views.cc b/chrome/browser/ui/views/bubble_anchor_util_views.cc
+--- a/chrome/browser/ui/views/bubble_anchor_util_views.cc
++++ b/chrome/browser/ui/views/bubble_anchor_util_views.cc
+@@ -5,6 +5,10 @@
+ #include "chrome/browser/ui/views/bubble_anchor_util_views.h"
+ 
+ #include "build/build_config.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
++
+ #include "chrome/browser/ui/bubble_anchor_util.h"
+ #include "chrome/browser/ui/views/frame/app_menu_button.h"
+ #include "chrome/browser/ui/views/frame/browser_view.h"
+@@ -22,6 +26,10 @@
+ AnchorConfiguration GetPageInfoAnchorConfiguration(Browser* browser,
+                                                    Anchor anchor) {
+   BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(browser_view))
++    return {};
++#endif
+   auto* location_bar_view = browser_view->GetLocationBarView();
+ 
+   if (base::FeatureList::IsEnabled(
+@@ -84,6 +92,10 @@
+ 
+ AnchorConfiguration GetPermissionPromptBubbleAnchorConfiguration(
+     Browser* browser) {
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(BrowserView::GetBrowserViewForBrowser(browser)))
++    return {};
++#endif
+   BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser);
+   if (browser_view->GetLocationBarView()->GetChipController() &&
+       browser_view->GetLocationBarView()
+@@ -101,6 +113,11 @@
+ }
+ 
+ gfx::Rect GetPageInfoAnchorRect(Browser* browser) {
++#if BUILDFLAG(IS_MAC)
++  gfx::Rect native_bounds = cocoa2010::OmniboxBounds(browser);
++  if (!native_bounds.IsEmpty())
++    return gfx::Rect(native_bounds.x(), native_bounds.bottom(), 16, 0);
++#endif
+   // GetPageInfoAnchorConfiguration()'s anchor_view should be preferred if
+   // available.
+   DCHECK_EQ(GetPageInfoAnchorConfiguration(browser).anchor_view, nullptr);
+diff --git a/chrome/browser/ui/views/frame/browser_frame_mac.mm b/chrome/browser/ui/views/frame/browser_frame_mac.mm
+--- a/chrome/browser/ui/views/frame/browser_frame_mac.mm
++++ b/chrome/browser/ui/views/frame/browser_frame_mac.mm
+@@ -20,6 +20,10 @@
+ #include "chrome/browser/ui/views/frame/browser_frame.h"
+ #include "chrome/browser/ui/views/frame/browser_non_client_frame_view.h"
+ #include "chrome/browser/ui/views/frame/browser_view.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
++
+ #include "chrome/browser/ui/views/web_apps/frame_toolbar/web_app_frame_toolbar_utils.h"
+ #include "chrome/browser/ui/web_applications/app_browser_controller.h"
+ #include "chrome/common/pref_names.h"
+@@ -151,6 +155,11 @@
+ void BrowserFrameMac::GetWindowFrameTitlebarHeight(
+     bool* override_titlebar_height,
+     float* titlebar_height) {
++  if (cocoa2010::Enabled(browser_view_)) {
++    *override_titlebar_height = false;
++    *titlebar_height = 0;
++    return;
++  }
+   if (browser_view_ && browser_view_->frame() &&
+       browser_view_->frame()->GetFrameView()) {
+     *override_titlebar_height = true;
+@@ -378,6 +387,13 @@
+   } else {
+     params->window_class = remote_cocoa::mojom::WindowClass::kDefault;
+   }
++  if (cocoa2010::Enabled(browser_view_)) {
++    params->style_mask &= ~NSWindowStyleMaskFullSizeContentView;
++    params->style_mask |= NSWindowStyleMaskTexturedBackground |
++                          NSWindowStyleMaskUnifiedTitleAndToolbar;
++    params->titlebar_appears_transparent = false;
++    params->window_title_hidden = true;
++  }
+   params->animation_enabled = true;
+ }
+ 
+@@ -402,6 +418,7 @@
+ }
+ 
+ void BrowserFrameMac::OnWindowInitialized() {
++  cocoa2010::Install(browser_view_, GetNSWindowHost()->GetInProcessNSWindow());
+   if (auto* bridge = GetInProcessNSWindowBridge()) {
+     bridge->SetCommandDispatcher([[ChromeCommandDispatcherDelegate alloc] init],
+                                  [[BrowserWindowCommandHandler alloc] init]);
+@@ -414,6 +431,7 @@
+ }
+ 
+ void BrowserFrameMac::OnWindowDestroying(gfx::NativeWindow native_window) {
++  cocoa2010::Uninstall(browser_view_);
+   // Clear delegates set in CreateNSWindow() to prevent objects with a reference
+   // to |window| attempting to validate commands by looking for a Browser*.
+   NativeWidgetMacNSWindow* ns_window =
+diff --git a/chrome/browser/ui/views/frame/browser_non_client_frame_view_mac.mm b/chrome/browser/ui/views/frame/browser_non_client_frame_view_mac.mm
+--- a/chrome/browser/ui/views/frame/browser_non_client_frame_view_mac.mm
++++ b/chrome/browser/ui/views/frame/browser_non_client_frame_view_mac.mm
+@@ -26,6 +26,10 @@
+ #include "chrome/browser/ui/views/bookmarks/bookmark_bar_view.h"
+ #include "chrome/browser/ui/views/frame/browser_frame.h"
+ #include "chrome/browser/ui/views/frame/browser_view.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
++
+ #include "chrome/browser/ui/views/frame/browser_view_layout.h"
+ #include "chrome/browser/ui/views/frame/caption_button_placeholder_container.h"
+ #include "chrome/browser/ui/views/frame/tab_strip_region_view.h"
+@@ -234,6 +238,8 @@
+ }
+ 
+ int BrowserNonClientFrameViewMac::GetTopInset(bool restored) const {
++  if (cocoa2010::Enabled(browser_view()))
++    return 0;
+   if (!browser_view()->ShouldDrawTabStrip()) {
+     return 0;
+   }
+diff --git a/chrome/browser/ui/views/frame/browser_view.cc b/chrome/browser/ui/views/frame/browser_view.cc
+--- a/chrome/browser/ui/views/frame/browser_view.cc
++++ b/chrome/browser/ui/views/frame/browser_view.cc
+@@ -64,6 +64,10 @@
+ #include "chrome/browser/ui/autofill/payments/save_card_ui.h"
+ #include "chrome/browser/ui/bookmarks/bookmark_stats.h"
+ #include "chrome/browser/ui/browser.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
++
+ #include "chrome/browser/ui/browser_command_controller.h"
+ #include "chrome/browser/ui/browser_commands.h"
+ #include "chrome/browser/ui/browser_dialogs.h"
+@@ -1143,6 +1147,10 @@
+ }
+ 
+ int BrowserView::GetTabStripHeight() const {
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(this))
++    return cocoa2010::TabStripHeight();
++#endif
+   // We want to return tabstrip_->height(), but we might be called in the midst
+   // of layout, when that hasn't yet been updated to reflect the current state.
+   // So return what the tabstrip height _ought_ to be right now.
+@@ -2130,6 +2138,12 @@
+ }
+ 
+ void BrowserView::SetFocusToLocationBar(bool is_user_initiated) {
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(this)) {
++    cocoa2010::FocusLocation(this);
++    return;
++  }
++#endif
+   // On Windows, changing focus to the location bar causes the browser window to
+   // become active. This can steal focus if the user has another window open
+   // already. On Chrome OS, changing focus makes a view believe it has a focus
+@@ -2164,6 +2178,10 @@
+   // We may end up here during destruction.
+   if (toolbar_)
+     toolbar_->Update(contents);
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(this))
++    cocoa2010::Update(this);
++#endif
+ }
+ 
+ void BrowserView::UpdateCustomTabBarVisibility(bool visible, bool animate) {
+@@ -4330,6 +4348,10 @@
+   }
+ 
+   LayoutSuperclass<views::View>(this);
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(this))
++    cocoa2010::Layout(this);
++#endif
+ 
+   // TODO(jamescook): Why was this in the middle of layout code?
+   toolbar_->location_bar()->omnibox_view()->SetFocusBehavior(
+@@ -4646,6 +4668,12 @@
+     bookmark_bar_view_ =
+         std::make_unique<BookmarkBarView>(browser_.get(), this);
+     bookmark_bar_view_->set_owned_by_client();
++#if BUILDFLAG(IS_MAC) && defined(SNOW_LEOPARD_PORT)
++    if (cocoa2010::Enabled(this)) {
++      bookmark_bar_view_->SetPaintToLayer();
++      bookmark_bar_view_->layer()->SetFillsBoundsOpaquely(false);
++    }
++#endif
+     bookmark_bar_view_->SetBookmarkBarState(
+         browser_->bookmark_bar_state(), BookmarkBar::DONT_ANIMATE_STATE_CHANGE);
+     GetBrowserViewLayout()->set_bookmark_bar(bookmark_bar_view_.get());
+diff --git a/chrome/browser/ui/views/frame/browser_view_layout.cc b/chrome/browser/ui/views/frame/browser_view_layout.cc
+--- a/chrome/browser/ui/views/frame/browser_view_layout.cc
++++ b/chrome/browser/ui/views/frame/browser_view_layout.cc
+@@ -14,6 +14,10 @@
+ #include "base/trace_event/trace_event.h"
+ #include "build/build_config.h"
+ #include "chrome/browser/ui/browser.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#endif
++
+ #include "chrome/browser/ui/browser_finder.h"
+ #include "chrome/browser/ui/browser_window.h"
+ #include "chrome/browser/ui/find_bar/find_bar.h"
+@@ -45,6 +49,7 @@
+ #include "ui/views/controls/webview/webview.h"
+ #include "ui/views/view_utils.h"
+ #include "ui/views/widget/widget.h"
++#include "ui/compositor/layer.h"
+ #include "ui/views/window/client_view.h"
+ #include "ui/views/window/hit_test_utils.h"
+ 
+@@ -550,6 +555,13 @@
+     tab_strip_region_view_->SetBounds(0, 0, 0, 0);
+     return top;
+   }
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(browser_view_)) {
++    SetViewVisibility(tab_strip_region_view_, false);
++    tab_strip_region_view_->SetBounds(0, 0, 0, 0);
++    return std::max(0, cocoa2010::ContentTopInset(browser_view_) - 35);
++  }
++#endif
+   // This retrieves the bounds for the tab strip based on whether or not we show
+   // anything to the left of it, like the incognito avatar.
+   gfx::Rect tab_strip_region_bounds(
+@@ -586,6 +598,18 @@
+   int browser_view_width = vertical_layout_rect_.width();
+   bool toolbar_visible = delegate_->IsToolbarVisible();
+   int height = toolbar_visible ? toolbar_->GetPreferredSize().height() : 0;
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(browser_view_)) {
++    // Keep model/popup hosts alive with current feature interfaces. Cocoa owns
++    // painting and native editing; this transparent Views host receives no
++    // pointer input because the native frame controls cover its bounds.
++    // The historical attached bookmarks bar compresses its toolbar by 3pt.
++    height = toolbar_visible ? 35 - (delegate_->IsBookmarkBarVisible() ? 3 : 0) : 0;
++    if (!toolbar_->layer())
++      toolbar_->SetPaintToLayer();
++    toolbar_->layer()->SetOpacity(0);
++  }
++#endif
+   SetViewVisibility(toolbar_, toolbar_visible);
+   toolbar_->SetBounds(vertical_layout_rect_.x(), top, browser_view_width,
+                       height);
+@@ -637,6 +661,13 @@
+ 
+   bookmark_bar_->SetInfoBarVisible(IsInfobarVisible());
+   int bookmark_bar_height = bookmark_bar_->GetPreferredSize().height();
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::Enabled(browser_view_)) {
++    bookmark_bar_height = 26;
++    if (!bookmark_bar_->layer()) bookmark_bar_->SetPaintToLayer();
++    bookmark_bar_->layer()->SetOpacity(0);
++  }
++#endif
+   bookmark_bar_->SetBounds(vertical_layout_rect_.x(), top,
+                            vertical_layout_rect_.width(), bookmark_bar_height);
+   // Set visibility after setting bounds, as the visibility update uses the
+diff --git a/chrome/browser/ui/views/omnibox/omnibox_view_views.cc b/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
+--- a/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
++++ b/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
+@@ -24,6 +24,11 @@
+ #include "base/task/thread_pool.h"
+ #include "base/time/time.h"
+ #include "build/build_config.h"
++#if BUILDFLAG(IS_MAC)
++#include "chrome/browser/ui/cocoa2010/browser_adapter.h"
++#include "chrome/browser/ui/cocoa2010/omnibox_popup.h"
++#endif
++
+ #include "build/chromeos_buildflags.h"
+ #include "chrome/app/chrome_command_ids.h"
+ #include "chrome/browser/command_updater.h"
+@@ -230,6 +235,10 @@
+   }
+ 
+   if (location_bar_view_) {
++#if BUILDFLAG(IS_MAC)
++    popup_view_ = cocoa2010::CreateOmniboxPopup(this, controller(), location_bar_view_->browser());
++    if (!popup_view_)
++#endif
+     if (base::FeatureList::IsEnabled(omnibox::kWebUIOmniboxPopup)) {
+       popup_view_ = std::make_unique<OmniboxPopupViewWebUI>(
+           /*omnibox_view=*/this, controller(), location_bar_view_);
+@@ -322,6 +331,9 @@
+ }
+ 
+ void OmniboxViewViews::EmphasizeURLComponents() {
++#if BUILDFLAG(IS_MAC)
++  cocoa2010::OmniboxTextChanged(this);
++#endif
+   // If the current contents is a URL, turn on special URL rendering mode in
+   // RenderText.
+   bool text_is_url = model()->CurrentTextIsURL();
+@@ -471,7 +483,19 @@
+   return width;
+ }
+ 
++bool OmniboxViewViews::HasFocus() const {
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::OmniboxHasFocus(this))
++    return true;
++#endif
++  return Textfield::HasFocus();
++}
++
+ bool OmniboxViewViews::IsImeComposing() const {
++#if BUILDFLAG(IS_MAC)
++  if (cocoa2010::OmniboxHasFocus(this))
++    return cocoa2010::OmniboxIsComposing(this);
++#endif
+   return IsIMEComposing();
+ }
+ 
+@@ -741,6 +765,9 @@
+ 
+   if (notify_text_changed)
+     TextChanged();
++#if BUILDFLAG(IS_MAC)
++  cocoa2010::OmniboxTextChanged(this);
++#endif
+ }
+ 
+ void OmniboxViewViews::SetCaretPos(size_t caret_pos) {
+@@ -759,6 +786,14 @@
+ }
+ 
+ void OmniboxViewViews::ApplyCaretVisibility() {
++#if BUILDFLAG(IS_MAC)
++  if (!cocoa2010::OmniboxBoundsForView(this).IsEmpty()) {
++    // NSTextView owns the native caret. A cursor timer in this transparent
++    // model host outlives native focus and asserts on its next blink.
++    SetCursorEnabled(false);
++    return;
++  }
++#endif
+   SetCursorEnabled(model()->is_caret_visible());
+ 
+   // TODO(tommycli): Because the LocationBarView has a somewhat different look
+diff --git a/chrome/browser/ui/views/omnibox/omnibox_view_views.h b/chrome/browser/ui/views/omnibox/omnibox_view_views.h
+--- a/chrome/browser/ui/views/omnibox/omnibox_view_views.h
++++ b/chrome/browser/ui/views/omnibox/omnibox_view_views.h
+@@ -135,6 +135,7 @@
+   void SelectAll(bool reversed) override;
+   void RevertAll() override;
+   void SetFocus(bool is_user_initiated) override;
++  bool HasFocus() const override;
+   bool IsImeComposing() const override;
+   gfx::NativeView GetRelativeWindowForPopup() const override;
+   bool IsImeShowingPopup() const override;
+diff --git a/components/remote_cocoa/app_shim/bridged_content_view.h b/components/remote_cocoa/app_shim/bridged_content_view.h
+--- a/components/remote_cocoa/app_shim/bridged_content_view.h
++++ b/components/remote_cocoa/app_shim/bridged_content_view.h
+@@ -56,6 +56,10 @@
+ @property(readonly, nonatomic) remote_cocoa::NativeWidgetNSWindowBridge* bridge;
+ @property(assign, nonatomic) BOOL drawMenuBackgroundForBlur;
+ @property(strong, nonatomic) NSEvent* keyDownEventForTesting;
++#if defined(SNOW_LEOPARD_PORT)
++// Native chrome covers this top slice; it must not block frame dragging.
++@property(nonatomic) CGFloat windowDragTopInset;
++#endif
+ 
+ // Initialize the NSView -> views::View bridge. |viewToHost| must be non-NULL.
+ - (instancetype)initWithBridge:(remote_cocoa::NativeWidgetNSWindowBridge*)bridge
+diff --git a/components/remote_cocoa/app_shim/bridged_content_view.mm b/components/remote_cocoa/app_shim/bridged_content_view.mm
+--- a/components/remote_cocoa/app_shim/bridged_content_view.mm
++++ b/components/remote_cocoa/app_shim/bridged_content_view.mm
+@@ -197,11 +197,44 @@
+ 
+ @end
+ 
++#if defined(SNOW_LEOPARD_PORT)
++@interface NSView (SnowiumWindowMoveRegion)
++- (NSRect)_opaqueRect;
++@end
++#endif
++
+ @implementation BridgedContentView
+ 
+ @synthesize bridge = _bridge;
+ @synthesize drawMenuBackgroundForBlur = _drawMenuBackgroundForBlur;
+ @synthesize keyDownEventForTesting = _keyDownEvent;
++#if defined(SNOW_LEOPARD_PORT)
++@synthesize windowDragTopInset = _windowDragTopInset;
++
++- (void)setWindowDragTopInset:(CGFloat)inset {
++  if (_windowDragTopInset == inset)
++    return;
++  _windowDragTopInset = inset;
++  // Ask AppKit to recalculate its server-side drag region with the new inset.
++  [self.window setMovableByWindowBackground:self.window.isMovableByWindowBackground];
++}
++
++- (NSRect)windowMoveBlockingRect {
++  NSRect rect = self.bounds;
++  rect.size.height = MAX(0, NSHeight(rect) - _windowDragTopInset);
++  return rect;
++}
++
++// 10.6's NSView::_regionForOpaqueDescendants:forMove: asks _opaqueRect,
++// which normally blocks the entire visibleRect of this opaque Views host.
++// Chromium 7's plain content NSView did not block the overlapping tab strip.
++// Keep the toolbar/page blocked while letting the native strip and its own
++// tab/button hit regions determine dragging above it. Painting is unchanged:
++// AppKit's non-move region calculation uses isOpaque rather than this method.
++- (NSRect)_opaqueRect {
++  return _windowDragTopInset > 0 ? [self windowMoveBlockingRect] : [super _opaqueRect];
++}
++#endif
+ 
+ - (instancetype)initWithBridge:(remote_cocoa::NativeWidgetNSWindowBridge*)bridge
+                         bounds:(gfx::Rect)bounds {
+@@ -684,6 +717,10 @@
+ // whole view is off limits but, since the view's content is rendered out of
+ // process and the view is locally transparent, AppKit won't guess that.
+ - (NSRect)_opaqueRectForWindowMoveWhenInTitlebar {
++#if defined(SNOW_LEOPARD_PORT)
++  if (_windowDragTopInset > 0)
++    return [self windowMoveBlockingRect];
++#endif
+   return self.bounds;
+ }
+ 
+diff --git a/components/remote_cocoa/app_shim/browser_native_widget_window_mac.mm b/components/remote_cocoa/app_shim/browser_native_widget_window_mac.mm
+--- a/components/remote_cocoa/app_shim/browser_native_widget_window_mac.mm
++++ b/components/remote_cocoa/app_shim/browser_native_widget_window_mac.mm
+@@ -70,6 +70,10 @@
+ // NSWindow (PrivateAPI) overrides.
+ 
+ + (Class)frameViewClassForStyleMask:(NSUInteger)windowStyle {
++#if defined(SNOW_LEOPARD_PORT)
++  if (windowStyle & NSWindowStyleMaskTexturedBackground)
++    return [super frameViewClassForStyleMask:windowStyle];
++#endif
+   // - NSThemeFrame and its subclasses will be nil if it's missing at runtime.
+   if ([BrowserWindowFrame class])
+     return [BrowserWindowFrame class];
+diff --git a/components/remote_cocoa/app_shim/native_widget_mac_nswindow.mm b/components/remote_cocoa/app_shim/native_widget_mac_nswindow.mm
+--- a/components/remote_cocoa/app_shim/native_widget_mac_nswindow.mm
++++ b/components/remote_cocoa/app_shim/native_widget_mac_nswindow.mm
+@@ -235,8 +235,10 @@
+ @implementation SnowiumWindowResizeGrip
+ - (BOOL)acceptsFirstMouse:(NSEvent*)event { return YES; }
+ - (void)drawRect:(NSRect)dirtyRect {
+-  [[NSColor windowBackgroundColor] set];
+-  NSRectFill(self.bounds);
++  if (!(self.window.styleMask & NSWindowStyleMaskUnifiedTitleAndToolbar)) {
++    [[NSColor windowBackgroundColor] set];
++    NSRectFill(self.bounds);
++  }
+   for (CGFloat inset = 3; inset <= 11; inset += 4) {
+     NSBezierPath* line = [NSBezierPath bezierPath];
+     [line moveToPoint:NSMakePoint(inset, 2)];
+@@ -523,6 +525,15 @@
+ #endif
+ 
+ + (Class)frameViewClassForStyleMask:(NSWindowStyleMask)windowStyle {
++#if defined(SNOW_LEOPARD_PORT)
++  // Chromium 7 uses AppKit's NSGrayFrame for textured browser windows.
++  // The modern NSThemeFrame subclass loses its native gradient and corners.
++  if (windowStyle & NSWindowStyleMaskTexturedBackground) {
++    if (Class frame = NSClassFromString(@"NSGrayFrame"))
++      return frame;
++    return [super frameViewClassForStyleMask:windowStyle];
++  }
++#endif
+   if (windowStyle & NSWindowStyleMaskTitled) {
+     if (Class customFrame = [NativeWidgetMacNSWindowTitledFrame class]) {
+       return customFrame;
+@@ -535,6 +546,10 @@
+ }
+ 
+ - (BOOL)_isTitleHidden {
++#if defined(SNOW_LEOPARD_PORT)
++  if (self.styleMask & NSWindowStyleMaskTexturedBackground)
++    return YES;
++#endif
+   bool shouldShowWindowTitle = YES;
+   if (_bridge && (@available(macOS 10.10, *))) {
+     _bridge->host()->GetShouldShowWindowTitle(&shouldShowWindowTitle);
+diff --git a/third_party/blink/public/platform/web_theme_engine.h b/third_party/blink/public/platform/web_theme_engine.h
+--- a/third_party/blink/public/platform/web_theme_engine.h
++++ b/third_party/blink/public/platform/web_theme_engine.h
+@@ -233,6 +233,18 @@
+     float scale_from_dip = 0;
+     std::optional<SkColor> thumb_color;
+     std::optional<SkColor> track_color;
++#if defined(SNOW_LEOPARD_PORT)
++    // Actual control geometry/range for HITheme's position-dependent Aqua
++    // artwork. Painting a synthetic centered thumb loses its fixed pattern.
++    gfx::Rect aqua_control_bounds;
++    int aqua_maximum = 0;
++    int aqua_visible_size = 0;
++    float aqua_position = 0;
++    bool aqua_active = true;
++    bool aqua_enabled = true;
++    bool aqua_has_buttons = true;
++    bool aqua_thumb_pressed = false;
++#endif
+   };
+ #endif
+ 
+@@ -256,6 +268,11 @@
+   // the track while the height will be the minimum height.
+   virtual gfx::Size GetSize(Part) { return gfx::Size(); }
+ 
++#if defined(SNOW_LEOPARD_PORT)
++  // Empty means that this theme has no native legacy thumb geometry.
++  virtual gfx::Rect GetAquaScrollbarThumbRect(const ExtraParams&) { return {}; }
++#endif
++
+   virtual bool SupportsNinePatch(Part) const { return false; }
+   virtual gfx::Size NinePatchCanvasSize(Part) const { return gfx::Size(); }
+   virtual gfx::Rect NinePatchAperture(Part) const { return gfx::Rect(); }
+diff --git a/third_party/blink/renderer/core/frame/local_frame_view.cc b/third_party/blink/renderer/core/frame/local_frame_view.cc
+--- a/third_party/blink/renderer/core/frame/local_frame_view.cc
++++ b/third_party/blink/renderer/core/frame/local_frame_view.cc
+@@ -32,6 +32,9 @@
+ 
+ #include "base/auto_reset.h"
+ #include "base/feature_list.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "ui/native_theme/native_theme_features.h"
++#endif
+ #include "base/functional/callback.h"
+ #include "base/functional/function_ref.h"
+ #include "base/memory/ptr_util.h"
+@@ -517,6 +520,13 @@
+   for (const auto& scrollbar : scrollbars_) {
+     if (uses_window_inactive_selector && scrollbar->IsCustomScrollbar())
+       scrollbar->StyleChanged();
++#if defined(SNOW_LEOPARD_PORT)
++    // HITheme supplies Aqua's inactive artwork; invalidate its cached display
++    // items when window activation changes, including overflow scrollbars.
++    if (ui::IsAquaScrollbarEnabled() && !scrollbar->IsCustomScrollbar() &&
++        !scrollbar->IsOverlayScrollbar())
++      scrollbar->SetNeedsPaintInvalidation(kAllParts);
++#endif
+   }
+ }
+ 
+diff --git a/third_party/blink/renderer/core/paint/paint_layer_scrollable_area.cc b/third_party/blink/renderer/core/paint/paint_layer_scrollable_area.cc
+--- a/third_party/blink/renderer/core/paint/paint_layer_scrollable_area.cc
++++ b/third_party/blink/renderer/core/paint/paint_layer_scrollable_area.cc
+@@ -47,6 +47,9 @@
+ #include <utility>
+ 
+ #include "base/numerics/checked_math.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "ui/native_theme/native_theme_features.h"
++#endif
+ #include "base/task/single_thread_task_runner.h"
+ #include "cc/animation/animation_timeline.h"
+ #include "cc/input/main_thread_scrolling_reason.h"
+@@ -330,6 +333,11 @@
+   bool has_horizontal_bar = HorizontalScrollbar();
+   bool has_vertical_bar = VerticalScrollbar();
+   bool has_resizer = GetLayoutBox()->CanResize();
++#if defined(SNOW_LEOPARD_PORT)
++  // Reserve the native window's grow box only in the top-level viewport.
++  has_resizer |= ui::IsAquaScrollbarEnabled() && layer_->IsRootLayer() && GetLayoutBox()->GetFrame()->IsMainFrame() &&
++                 !HasOverlayScrollbars();
++#endif
+   if ((has_horizontal_bar && has_vertical_bar) ||
+       (has_resizer && (has_horizontal_bar || has_vertical_bar))) {
+     return CornerRect();
+diff --git a/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.cc b/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.cc
+--- a/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.cc
++++ b/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.cc
+@@ -139,6 +139,11 @@
+     const Scrollbar& scrollbar,
+     float old_position,
+     float new_position) const {
++#if defined(SNOW_LEOPARD_PORT)
++  if (ui::IsAquaScrollbarEnabled() && !UsesOverlayScrollbars() && !scrollbar.ScrollbarThumbColor().has_value() &&
++      !scrollbar.ScrollbarTrackColor().has_value())
++    return kAllParts;
++#endif
+   // MacScrollbarAnimatorImpl will invalidate scrollbar parts if necessary.
+   return kNoPart;
+ }
+@@ -174,6 +179,20 @@
+           ? mojom::blink::ColorScheme::kDark
+           : mojom::blink::ColorScheme::kLight;
+   scrollbar_extra.is_overlay = overlay;
++#if defined(SNOW_LEOPARD_PORT)
++  if (ui::IsAquaScrollbarEnabled()) {
++    scrollbar_extra.aqua_control_bounds = gfx::Rect(scrollbar.FrameRect().size());
++    scrollbar_extra.aqua_maximum = scrollbar.Maximum();
++    scrollbar_extra.aqua_visible_size = scrollbar.VisibleSize();
++    scrollbar_extra.aqua_position = scrollbar.CurrentPos();
++    scrollbar_extra.aqua_active = scrollbar.IsScrollableAreaActive();
++    scrollbar_extra.aqua_enabled = scrollbar.Enabled();
++    scrollbar_extra.aqua_thumb_pressed = scrollbar.PressedPart() == kThumbPart;
++    scrollbar_extra.aqua_has_buttons = scrollbar.Enabled() &&
++        (scrollbar.Orientation() == kHorizontalScrollbar ? scrollbar.Width() : scrollbar.Height()) >=
++        (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 38 : 50) * scrollbar.ScaleFromDIP();
++  }
++#endif
+ 
+   if (overlay) {
+     scrollbar_extra.scrollbar_theme =
+@@ -200,11 +219,49 @@
+   return WebThemeEngine::ExtraParams(scrollbar_extra);
+ }
+ 
++#if defined(SNOW_LEOPARD_PORT)
++namespace {
++bool UsesAquaGeometry(const Scrollbar& scrollbar) {
++  return ui::IsAquaScrollbarEnabled() && !ScrollbarThemeMac::PreferOverlayScrollerStyle() &&
++      !scrollbar.ScrollbarThumbColor().has_value() &&
++      !scrollbar.ScrollbarTrackColor().has_value();
++}
++gfx::Rect AquaThumbRect(const Scrollbar& scrollbar, float position) {
++  auto params = GetPaintParams(scrollbar, false);
++  absl::get<WebThemeEngine::ScrollbarExtraParams>(params).aqua_position = position;
++  return WebThemeEngineHelper::GetNativeThemeEngine()->GetAquaScrollbarThumbRect(params);
++}
++}  // namespace
++
++int ScrollbarThemeMac::ThumbPosition(const Scrollbar& scrollbar, float position) {
++  if (!UsesAquaGeometry(scrollbar))
++    return ScrollbarTheme::ThumbPosition(scrollbar, position);
++  const gfx::Rect thumb = AquaThumbRect(scrollbar, position);
++  const int native_position = scrollbar.Orientation() == kHorizontalScrollbar ? thumb.x() : thumb.y();
++  return native_position - TrackPosition(scrollbar);
++}
++int ScrollbarThemeMac::ThumbLength(const Scrollbar& scrollbar) {
++  if (!UsesAquaGeometry(scrollbar))
++    return ScrollbarTheme::ThumbLength(scrollbar);
++  const gfx::Rect thumb = AquaThumbRect(scrollbar, scrollbar.CurrentPos());
++  return scrollbar.Orientation() == kHorizontalScrollbar ? thumb.width() : thumb.height();
++}
++#endif
++
+ void ScrollbarThemeMac::PaintTrack(GraphicsContext& context,
+                                    const Scrollbar& scrollbar,
+                                    const gfx::Rect& rect) {
+   GraphicsContextStateSaver state_saver(context);
+-  context.Translate(rect.x(), rect.y());
++  gfx::Point paint_origin = rect.origin();
++#if defined(SNOW_LEOPARD_PORT)
++  if (UsesAquaGeometry(scrollbar)) {
++    // TrackRect describes knob travel for hit testing. Draw the complete
++    // native control at FrameRect plus the display-list paint offset.
++    paint_origin = scrollbar.FrameRect().origin() +
++        (rect.origin() - TrackRect(scrollbar).origin());
++  }
++#endif
++  context.Translate(paint_origin.x(), paint_origin.y());
+ 
+   auto* mac_scrollbar = MacScrollbar::GetForScrollbar(scrollbar);
+   if (!mac_scrollbar)
+@@ -234,6 +291,23 @@
+   WebThemeEngineHelper::GetNativeThemeEngine()->Paint(
+       context.Canvas(), track_part, WebThemeEngine::State::kStateNormal, bounds,
+       &params, scrollbar_extra.scrollbar_theme, color_provider);
++#if defined(SNOW_LEOPARD_PORT)
++  auto pressed = scrollbar.PressedPart();
++  if (HasButtons(scrollbar) &&
++      (pressed == kBackButtonStartPart || pressed == kForwardButtonEndPart)) {
++    GraphicsContextStateSaver pressed_saver(context);
++    gfx::Rect button = pressed == kBackButtonStartPart ? BackButtonRect(scrollbar) : ForwardButtonRect(scrollbar);
++    // Button geometry is in scrollbar coordinates; the context already
++    // includes its display-list offset. Clip relative to the control itself.
++    button.Offset(-scrollbar.FrameRect().x(), -scrollbar.FrameRect().y());
++    context.Clip(button);
++    WebThemeEngine::Part arrow = scrollbar.Orientation() == kHorizontalScrollbar
++        ? (pressed == kBackButtonStartPart ? WebThemeEngine::kPartScrollbarLeftArrow : WebThemeEngine::kPartScrollbarRightArrow)
++        : (pressed == kBackButtonStartPart ? WebThemeEngine::kPartScrollbarUpArrow : WebThemeEngine::kPartScrollbarDownArrow);
++    WebThemeEngineHelper::GetNativeThemeEngine()->Paint(context.Canvas(), arrow,
++        WebThemeEngine::kStatePressed, bounds, &params, scrollbar_extra.scrollbar_theme, color_provider);
++  }
++#endif
+   if (opacity != 1)
+     context.EndLayer();
+ }
+@@ -272,6 +346,11 @@
+                                            const Scrollbar& scrollbar,
+                                            const gfx::Rect& rect,
+                                            float opacity) {
++#if defined(SNOW_LEOPARD_PORT)
++  // Aqua is painted into the track resource as one native control. A separate
++  // thumb quad would move its stationary pattern and alter HITheme's ends.
++  if (UsesAquaGeometry(scrollbar)) return;
++#endif
+   if (DrawingRecorder::UseCachedDrawingIfPossible(
+           context, scrollbar, DisplayItem::kScrollbarThumb)) {
+     return;
+@@ -295,8 +374,9 @@
+ 
+   WebThemeEngine::ExtraParams params =
+       GetPaintParams(scrollbar, UsesOverlayScrollbars());
+-  const auto& scrollbar_extra =
++  auto& scrollbar_extra =
+       absl::get<WebThemeEngine::ScrollbarExtraParams>(params);
++
+ 
+   // Compute the bounds for the thumb, accounting for lack of engorgement.
+   gfx::Rect bounds;
+@@ -356,6 +436,10 @@
+ }
+ 
+ bool ScrollbarThemeMac::HasThumb(const Scrollbar& scrollbar) {
++#if defined(SNOW_LEOPARD_PORT)
++  if (UsesAquaGeometry(scrollbar))
++    return !AquaThumbRect(scrollbar, scrollbar.CurrentPos()).IsEmpty();
++#endif
+   const auto& painter_values = GetScrollbarPainterValues(scrollbar);
+   int min_length_for_thumb =
+       painter_values.knob_min_length + painter_values.track_overlap_end_inset +
+@@ -367,20 +451,85 @@
+               : scrollbar.Height()) >= min_length_for_thumb;
+ }
+ 
++// WebCore's original Aqua double-end layout: inner button 14, outer 16
++// (10/14 for small controls). The current Scrollbar owns repeat/hit testing.
++bool ScrollbarThemeMac::HasButtons(const Scrollbar& scrollbar) {
++#if defined(SNOW_LEOPARD_PORT)
++  return UsesAquaGeometry(scrollbar) && scrollbar.Enabled() &&
++      (scrollbar.Orientation() == kHorizontalScrollbar ? scrollbar.Width() : scrollbar.Height()) >=
++      (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 38 : 50) * scrollbar.ScaleFromDIP();
++#else
++  return false;
++#endif
++}
+ gfx::Rect ScrollbarThemeMac::BackButtonRect(const Scrollbar& scrollbar) {
++#if defined(SNOW_LEOPARD_PORT)
++  if (HasButtons(scrollbar)) {
++    int inner = (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 10 : 14) * scrollbar.ScaleFromDIP();
++    int outer = (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 14 : 16) * scrollbar.ScaleFromDIP();
++    gfx::Rect result = scrollbar.FrameRect();
++    if (scrollbar.Orientation() == kHorizontalScrollbar) {
++      result.set_x(result.right() - inner - outer); result.set_width(inner);
++    } else {
++      result.set_y(result.bottom() - inner - outer); result.set_height(inner);
++    }
++    return result;
++  }
++#endif
+   return gfx::Rect();
+ }
+ 
+ gfx::Rect ScrollbarThemeMac::ForwardButtonRect(const Scrollbar& scrollbar) {
++#if defined(SNOW_LEOPARD_PORT)
++  if (HasButtons(scrollbar)) {
++    int outer = (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 14 : 16) * scrollbar.ScaleFromDIP();
++    gfx::Rect result = scrollbar.FrameRect();
++    if (scrollbar.Orientation() == kHorizontalScrollbar) {
++      result.set_x(result.right() - outer); result.set_width(outer);
++    } else {
++      result.set_y(result.bottom() - outer); result.set_height(outer);
++    }
++    return result;
++  }
++#endif
+   return gfx::Rect();
+ }
+ 
+ gfx::Rect ScrollbarThemeMac::TrackRect(const Scrollbar& scrollbar) {
++#if defined(SNOW_LEOPARD_PORT)
++  if (UsesAquaGeometry(scrollbar)) {
++    // Expose HITheme's knob travel to compositor-side dragging as well.
++    const gfx::Rect first = AquaThumbRect(scrollbar, 0);
++    const gfx::Rect last = AquaThumbRect(scrollbar, scrollbar.Maximum());
++    if (!first.IsEmpty() && !last.IsEmpty()) {
++      gfx::Rect rect = scrollbar.FrameRect();
++      if (scrollbar.Orientation() == kHorizontalScrollbar) {
++        rect.set_x(rect.x() + first.x());
++        rect.set_width(last.right() - first.x());
++      } else {
++        rect.set_y(rect.y() + first.y());
++        rect.set_height(last.bottom() - first.y());
++      }
++      return rect;
++    }
++  }
++  if (HasButtons(scrollbar)) {
++    gfx::Rect rect = scrollbar.FrameRect();
++    int buttons = (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 24 : 30) * scrollbar.ScaleFromDIP();
++    if (scrollbar.Orientation() == kHorizontalScrollbar) rect.set_width(rect.width() - buttons);
++    else rect.set_height(rect.height() - buttons);
++    return rect;
++  }
++#endif
+   return scrollbar.FrameRect();
+ }
+ 
+ int ScrollbarThemeMac::MinimumThumbLength(const Scrollbar& scrollbar) {
+   const auto& painter_values = GetScrollbarPainterValues(scrollbar);
++#if defined(SNOW_LEOPARD_PORT)
++  if (UsesAquaGeometry(scrollbar))
++    return (scrollbar.CSSScrollbarWidth() == EScrollbarWidth::kThin ? 20 : 26) * scrollbar.ScaleFromDIP();
++#endif
+   return painter_values.knob_min_length;
+ }
+ 
+diff --git a/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.h b/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.h
+--- a/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.h
++++ b/third_party/blink/renderer/core/scroll/scrollbar_theme_mac.h
+@@ -27,6 +27,9 @@
+ #define THIRD_PARTY_BLINK_RENDERER_CORE_SCROLL_SCROLLBAR_THEME_MAC_H_
+ 
+ #include "third_party/blink/renderer/core/scroll/scrollbar_theme.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "ui/native_theme/native_theme_features.h"
++#endif
+ 
+ namespace blink {
+ 
+@@ -73,6 +76,11 @@
+   void UpdateScrollbarOverlayColorTheme(const Scrollbar&) override;
+ 
+   void SetNewPainterForScrollbar(Scrollbar&);
++#if defined(SNOW_LEOPARD_PORT)
++  using ScrollbarTheme::ThumbPosition;
++  int ThumbPosition(const Scrollbar&, float scroll_position) override;
++  int ThumbLength(const Scrollbar&) override;
++#endif
+ 
+   void PaintThumb(GraphicsContext& context,
+                   const Scrollbar& scrollbar,
+@@ -107,7 +115,14 @@
+   gfx::Rect BackButtonRect(const Scrollbar&) override;
+   gfx::Rect ForwardButtonRect(const Scrollbar&) override;
+ 
+-  bool NativeThemeHasButtons() override { return false; }
++  bool NativeThemeHasButtons() override {
++#if defined(SNOW_LEOPARD_PORT)
++    return ui::IsAquaScrollbarEnabled();
++#else
++    return false;
++#endif
++  }
++  bool HasButtons(const Scrollbar&) override;
+   bool HasThumb(const Scrollbar&) override;
+ 
+   int MinimumThumbLength(const Scrollbar&) override;
+diff --git a/third_party/blink/renderer/platform/theme/web_theme_engine_mac.cc b/third_party/blink/renderer/platform/theme/web_theme_engine_mac.cc
+--- a/third_party/blink/renderer/platform/theme/web_theme_engine_mac.cc
++++ b/third_party/blink/renderer/platform/theme/web_theme_engine_mac.cc
+@@ -6,8 +6,57 @@
+ 
+ #include "third_party/blink/renderer/platform/theme/web_theme_engine_conversions.h"
+ #include "ui/native_theme/native_theme.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "ui/native_theme/aqua_scrollbar.h"
++#endif
+ 
+ namespace blink {
++
++namespace {
++ui::NativeTheme::ScrollbarExtraParams NativeScrollbarParams(
++    const WebThemeEngine::ScrollbarExtraParams& scrollbar_extra) {
++  ui::NativeTheme::ScrollbarExtraParams native_scrollbar_extra;
++  native_scrollbar_extra.is_hovering = scrollbar_extra.is_hovering;
++  native_scrollbar_extra.is_overlay = scrollbar_extra.is_overlay;
++  native_scrollbar_extra.scale_from_dip = scrollbar_extra.scale_from_dip;
++  native_scrollbar_extra.track_color = scrollbar_extra.track_color;
++  native_scrollbar_extra.thumb_color = scrollbar_extra.thumb_color;
++#if defined(SNOW_LEOPARD_PORT)
++  native_scrollbar_extra.aqua_control_bounds = scrollbar_extra.aqua_control_bounds;
++  native_scrollbar_extra.aqua_maximum = scrollbar_extra.aqua_maximum;
++  native_scrollbar_extra.aqua_visible_size = scrollbar_extra.aqua_visible_size;
++  native_scrollbar_extra.aqua_position = scrollbar_extra.aqua_position;
++  native_scrollbar_extra.aqua_active = scrollbar_extra.aqua_active;
++  native_scrollbar_extra.aqua_enabled = scrollbar_extra.aqua_enabled;
++  native_scrollbar_extra.aqua_has_buttons = scrollbar_extra.aqua_has_buttons;
++  native_scrollbar_extra.aqua_thumb_pressed = scrollbar_extra.aqua_thumb_pressed;
++#endif
++  switch (scrollbar_extra.orientation) {
++    case WebThemeEngine::kVerticalOnRight:
++      native_scrollbar_extra.orientation =
++          ui::NativeTheme::ScrollbarOrientation::kVerticalOnRight;
++      break;
++    case WebThemeEngine::kVerticalOnLeft:
++      native_scrollbar_extra.orientation =
++          ui::NativeTheme::ScrollbarOrientation::kVerticalOnLeft;
++      break;
++    case WebThemeEngine::kHorizontal:
++      native_scrollbar_extra.orientation =
++          ui::NativeTheme::ScrollbarOrientation::kHorizontal;
++      break;
++  }
++
++  return native_scrollbar_extra;
++}
++}  // namespace
++
++#if defined(SNOW_LEOPARD_PORT)
++gfx::Rect WebThemeEngineMac::GetAquaScrollbarThumbRect(const ExtraParams& params) {
++  return ui::GetAquaScrollbarThumbRect(NativeScrollbarParams(
++      absl::get<WebThemeEngine::ScrollbarExtraParams>(params)));
++}
++#endif
++
+ 
+ void WebThemeEngineMac::Paint(cc::PaintCanvas* canvas,
+                               WebThemeEngine::Part part,
+@@ -29,6 +78,12 @@
+ 
+ bool WebThemeEngineMac::IsScrollbarPart(WebThemeEngine::Part part) {
+   switch (part) {
++#if defined(SNOW_LEOPARD_PORT)
++    case WebThemeEngine::kPartScrollbarUpArrow:
++    case WebThemeEngine::kPartScrollbarDownArrow:
++    case WebThemeEngine::kPartScrollbarLeftArrow:
++    case WebThemeEngine::kPartScrollbarRightArrow:
++#endif
+     case WebThemeEngine::kPartScrollbarHorizontalTrack:
+     case WebThemeEngine::kPartScrollbarVerticalTrack:
+     case WebThemeEngine::kPartScrollbarHorizontalThumb:
+@@ -51,25 +106,7 @@
+   ui::NativeTheme::ScrollbarExtraParams native_scrollbar_extra;
+   const WebThemeEngine::ScrollbarExtraParams& scrollbar_extra =
+       absl::get<WebThemeEngine::ScrollbarExtraParams>(*extra_params);
+-  native_scrollbar_extra.is_hovering = scrollbar_extra.is_hovering;
+-  native_scrollbar_extra.is_overlay = scrollbar_extra.is_overlay;
+-  native_scrollbar_extra.scale_from_dip = scrollbar_extra.scale_from_dip;
+-  native_scrollbar_extra.track_color = scrollbar_extra.track_color;
+-  native_scrollbar_extra.thumb_color = scrollbar_extra.thumb_color;
+-  switch (scrollbar_extra.orientation) {
+-    case WebThemeEngine::kVerticalOnRight:
+-      native_scrollbar_extra.orientation =
+-          ui::NativeTheme::ScrollbarOrientation::kVerticalOnRight;
+-      break;
+-    case WebThemeEngine::kVerticalOnLeft:
+-      native_scrollbar_extra.orientation =
+-          ui::NativeTheme::ScrollbarOrientation::kVerticalOnLeft;
+-      break;
+-    case WebThemeEngine::kHorizontal:
+-      native_scrollbar_extra.orientation =
+-          ui::NativeTheme::ScrollbarOrientation::kHorizontal;
+-      break;
+-  }
++  native_scrollbar_extra = NativeScrollbarParams(scrollbar_extra);
+ 
+   ui::NativeTheme::GetInstanceForNativeUi()->Paint(
+       canvas, color_provider, NativeThemePart(part), NativeThemeState(state),
+diff --git a/third_party/blink/renderer/platform/theme/web_theme_engine_mac.h b/third_party/blink/renderer/platform/theme/web_theme_engine_mac.h
+--- a/third_party/blink/renderer/platform/theme/web_theme_engine_mac.h
++++ b/third_party/blink/renderer/platform/theme/web_theme_engine_mac.h
+@@ -22,6 +22,10 @@
+              const ui::ColorProvider* color_provider,
+              const std::optional<SkColor>& accent_color) override;
+ 
++#if defined(SNOW_LEOPARD_PORT)
++  gfx::Rect GetAquaScrollbarThumbRect(const ExtraParams&) override;
++#endif
++
+   static bool IsScrollbarPart(WebThemeEngine::Part part);
+   static void PaintMacScrollBarParts(
+       cc::PaintCanvas* canvas,
+diff --git a/tools/metrics/histograms/enums.xml b/tools/metrics/histograms/enums.xml
+--- a/tools/metrics/histograms/enums.xml
++++ b/tools/metrics/histograms/enums.xml
+@@ -16922,6 +16922,7 @@
+       label="DownloadNotificationServiceUnifiedAPI:enabled"/>
+   <int value="-1788763369" label="PrintingPpdChannel:disabled"/>
+   <int value="-1787333474" label="FedCmError:disabled"/>
++  <int value="-1787092119" label="AquaScrollbar:enabled"/>
+   <int value="-1786020274" label="AppSpecificHistory:enabled"/>
+   <int value="-1784831690" label="Bento:disabled"/>
+   <int value="-1784788154" label="NewRemotePlaybackPipeline:disabled"/>
+@@ -19050,6 +19051,7 @@
+   <int value="-825942229" label="tab-management-experiment-type-elderberry"/>
+   <int value="-825514105" label="TimeOfDayDlc:enabled"/>
+   <int value="-825312041" label="CastStreamingAv1:enabled"/>
++  <int value="-825093610" label="enable-cocoa-2010-ui"/>
+   <int value="-824199802" label="ContextualSearchSimplifiedServer:enabled"/>
+   <int value="-823394398" label="TargetEmbeddingLookalikes:enabled"/>
+   <int value="-823165021" label="MaterialDesignUserMenu:enabled"/>
+@@ -20465,6 +20467,7 @@
+       label="AutofillEnforceMinRequiredFieldsForHeuristics:enabled"/>
+   <int value="-181279574" label="NativeFilesystemAPI:enabled"/>
+   <int value="-181093956" label="ScrollAnchoring:enabled"/>
++  <int value="-180779799" label="AquaScrollbar:disabled"/>
+   <int value="-180658998" label="ReadLater:disabled"/>
+   <int value="-180481252" label="CompositorThreadedScrollbarScrolling:enabled"/>
+   <int value="-180056644" label="HomeButtonWithText:disabled"/>
+@@ -23843,6 +23846,7 @@
+   <int value="1338356182" label="AutofillAssistantChromeEntry:disabled"/>
+   <int value="1338510325" label="lacros-selection"/>
+   <int value="1338606926" label="BatterySaverModeAvailable:enabled"/>
++  <int value="1338756779" label="disable-cocoa-2010-ui"/>
+   <int value="1338864675" label="EnableTouchableAppContextMenu:disabled"/>
+   <int value="1339191800" label="OmniboxMaxZeroSuggestMatches:disabled"/>
+   <int value="1339426771" label="TopSitesFromSiteEngagement:disabled"/>
+diff --git a/ui/native_theme/BUILD.gn b/ui/native_theme/BUILD.gn
+--- a/ui/native_theme/BUILD.gn
++++ b/ui/native_theme/BUILD.gn
+@@ -1,4 +1,5 @@
+ import("//snow_leopard/frameworks.gni")
++import("//snow_leopard/config.gni")
+ 
+ # Copyright 2014 The Chromium Authors
+ # Use of this source code is governed by a BSD-style license that can be
+@@ -59,6 +60,10 @@
+     weak_frameworks =[
+       "MediaAccessibility.framework",
+     ]
++    if (snow_leopard_port) {
++      frameworks += [ "Carbon.framework" ]
++      sources += [ "aqua_scrollbar.h", "aqua_scrollbar.mm" ]
++    }
+     sources += [
+       "caption_style_mac.mm",
+       "native_theme_mac.h",
+diff --git a/ui/native_theme/native_theme.h b/ui/native_theme/native_theme.h
+--- a/ui/native_theme/native_theme.h
++++ b/ui/native_theme/native_theme.h
+@@ -328,6 +328,18 @@
+     // element-specific web platform CSS.
+     std::optional<SkColor> thumb_color;
+     std::optional<SkColor> track_color;
++#if defined(SNOW_LEOPARD_PORT)
++    // Actual control geometry/range for HITheme's position-dependent Aqua
++    // artwork. Painting a synthetic centered thumb loses its fixed pattern.
++    gfx::Rect aqua_control_bounds;
++    int aqua_maximum = 0;
++    int aqua_visible_size = 0;
++    float aqua_position = 0;
++    bool aqua_active = true;
++    bool aqua_enabled = true;
++    bool aqua_has_buttons = true;
++    bool aqua_thumb_pressed = false;
++#endif
+   };
+ #endif
+ 
+diff --git a/ui/native_theme/native_theme_features.cc b/ui/native_theme/native_theme_features.cc
+--- a/ui/native_theme/native_theme_features.cc
++++ b/ui/native_theme/native_theme_features.cc
+@@ -8,6 +8,10 @@
+ #include "build/chromeos_buildflags.h"
+ 
+ namespace features {
++
++#if defined(SNOW_LEOPARD_PORT)
++BASE_FEATURE(kAquaScrollbar, "AquaScrollbar", base::FEATURE_DISABLED_BY_DEFAULT);
++#endif
+ 
+ #if BUILDFLAG(IS_ANDROID) || BUILDFLAG(IS_CHROMEOS_ASH) ||    \
+     BUILDFLAG(IS_FUCHSIA) || BUILDFLAG(IS_CHROMEOS_LACROS) || \
+@@ -47,6 +51,12 @@
+ 
+ namespace ui {
+ 
++#if defined(SNOW_LEOPARD_PORT)
++bool IsAquaScrollbarEnabled() {
++  return base::FeatureList::IsEnabled(features::kAquaScrollbar);
++}
++#endif
++
+ bool IsOverlayScrollbarEnabled() {
+   return base::FeatureList::IsEnabled(features::kOverlayScrollbar) ||
+          IsFluentOverlayScrollbarEnabled();
+diff --git a/ui/native_theme/native_theme_features.h b/ui/native_theme/native_theme_features.h
+--- a/ui/native_theme/native_theme_features.h
++++ b/ui/native_theme/native_theme_features.h
+@@ -15,6 +15,9 @@
+ NATIVE_THEME_EXPORT BASE_DECLARE_FEATURE(kOverlayScrollbar);
+ NATIVE_THEME_EXPORT BASE_DECLARE_FEATURE(kFluentScrollbar);
+ NATIVE_THEME_EXPORT BASE_DECLARE_FEATURE(kFluentOverlayScrollbar);
++#if defined(SNOW_LEOPARD_PORT)
++NATIVE_THEME_EXPORT BASE_DECLARE_FEATURE(kAquaScrollbar);
++#endif
+ 
+ }  // namespace features
+ 
+@@ -23,6 +26,9 @@
+ NATIVE_THEME_EXPORT bool IsOverlayScrollbarEnabled();
+ NATIVE_THEME_EXPORT bool IsFluentScrollbarEnabled();
+ NATIVE_THEME_EXPORT bool IsFluentOverlayScrollbarEnabled();
++#if defined(SNOW_LEOPARD_PORT)
++NATIVE_THEME_EXPORT bool IsAquaScrollbarEnabled();
++#endif
+ 
+ }  // namespace ui
+ 
+diff --git a/ui/native_theme/native_theme_mac.mm b/ui/native_theme/native_theme_mac.mm
+--- a/ui/native_theme/native_theme_mac.mm
++++ b/ui/native_theme/native_theme_mac.mm
+@@ -3,6 +3,9 @@
+ // found in the LICENSE file.
+ 
+ #include "ui/native_theme/native_theme_mac.h"
++#if defined(SNOW_LEOPARD_PORT)
++#include "ui/native_theme/aqua_scrollbar.h"
++#endif
+ 
+ #import <Cocoa/Cocoa.h>
+ #include <MediaAccessibility/MediaAccessibility.h>
+@@ -179,6 +182,16 @@
+   if (rect.IsEmpty()) {
+     return;
+   }
++
++#if defined(SNOW_LEOPARD_PORT)
++  if (part == kScrollbarHorizontalThumb || part == kScrollbarVerticalThumb ||
++      part == kScrollbarHorizontalTrack || part == kScrollbarVerticalTrack ||
++      part == kScrollbarUpArrow || part == kScrollbarDownArrow ||
++      part == kScrollbarLeftArrow || part == kScrollbarRightArrow) {
++    if (absl::holds_alternative<ScrollbarExtraParams>(extra) && PaintAquaScrollbar(canvas, part, state, rect,
++                           absl::get<ScrollbarExtraParams>(extra))) return;
++  }
++#endif
+ 
+   switch (part) {
+     case kScrollbarHorizontalThumb:

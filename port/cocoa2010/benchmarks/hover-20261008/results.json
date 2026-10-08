@@ -1,0 +1,74 @@
+{
+  "before": {
+    "records": 295,
+    "event_delivery": {
+      "n": 7,
+      "median_ms": 1.503,
+      "p95_ms": 2.159,
+      "max_ms": 2.159
+    },
+    "tick_interval": {
+      "n": 83,
+      "median_ms": 53.783,
+      "p95_ms": 82.259,
+      "max_ms": 90.525
+    },
+    "request_to_draw": {
+      "n": 96,
+      "median_ms": 14.973,
+      "p95_ms": 15.902,
+      "max_ms": 16.51
+    },
+    "paint": {
+      "n": 96,
+      "median_ms": 2.849,
+      "p95_ms": 3.947,
+      "max_ms": 4.939
+    },
+    "draw_spacing": {
+      "n": 83,
+      "median_ms": 51.965,
+      "p95_ms": 83.352,
+      "max_ms": 100.241
+    },
+    "animation_keys": [
+      "none"
+    ]
+  },
+  "after": {
+    "records": 2160,
+    "event_delivery": {
+      "n": 18,
+      "median_ms": 1.44,
+      "p95_ms": 2.028,
+      "max_ms": 2.028
+    },
+    "tick_interval": {
+      "n": 678,
+      "median_ms": 16.669,
+      "p95_ms": 17.092,
+      "max_ms": 20.844
+    },
+    "request_to_draw": {
+      "n": 714,
+      "median_ms": 0.398,
+      "p95_ms": 3.626,
+      "max_ms": 6.045
+    },
+    "paint": {
+      "n": 714,
+      "median_ms": 1.752,
+      "p95_ms": 3.458,
+      "max_ms": 8.039
+    },
+    "draw_spacing": {
+      "n": 678,
+      "median_ms": 16.674,
+      "p95_ms": 17.361,
+      "max_ms": 20.1
+    },
+    "animation_keys": [
+      "none"
+    ]
+  }
+}

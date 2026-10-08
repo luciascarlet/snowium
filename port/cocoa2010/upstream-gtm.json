@@ -1,0 +1,8 @@
+{
+  "source": "Chromium 60.0.3112.113 bundled GTM, copyright 2009, same helper API used by Chromium 7",
+  "files": {
+    "GTMNSColor+Luminance.h": "799b2e50d477da0c5e91de823074cf16c6496e4210379e7685b3201996f18be9",
+    "GTMNSColor+Luminance.m": "addf0dc0fb64bb6f619f790da6604d18b959fb426611768f5b87de89abb7d870",
+    "LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  }
+}

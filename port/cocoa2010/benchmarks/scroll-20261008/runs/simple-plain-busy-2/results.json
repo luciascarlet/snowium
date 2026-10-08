@@ -1,0 +1,61 @@
+{
+  "label": "simple-plain-busy-2",
+  "elapsedMs": 24181.289375,
+  "cpu": [
+    {
+      "type": "browser",
+      "id": 20107,
+      "cpuTime": 14.427088,
+      "seconds": 0.36163599999999896
+    },
+    {
+      "type": "renderer",
+      "id": 20126,
+      "cpuTime": 2.59105,
+      "seconds": 0.03924700000000003
+    },
+    {
+      "type": "renderer",
+      "id": 20116,
+      "cpuTime": 3.503453,
+      "seconds": 0.04791699999999999
+    },
+    {
+      "type": "renderer",
+      "id": 20115,
+      "cpuTime": 40.788381,
+      "seconds": 5.357455000000002
+    },
+    {
+      "type": "GPU",
+      "id": 20109,
+      "cpuTime": 8.812457,
+      "seconds": 0.523536
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "id": 20110,
+      "cpuTime": 2.058594,
+      "seconds": 0.04878199999999966
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "id": 20111,
+      "cpuTime": 1.136155,
+      "seconds": 0.04889100000000002
+    },
+    {
+      "type": "tracing.mojom.TracingService",
+      "id": 20127,
+      "cpuTime": 10.180864,
+      "seconds": 0.19934399999999997
+    }
+  ],
+  "histogramBefore": {
+    "histograms": []
+  },
+  "histogramAfter": {
+    "histograms": []
+  },
+  "browserVersion": "Chrome/124.0.6367.207.1"
+}

@@ -1,0 +1,224 @@
+{
+  "build": "pass25",
+  "os": "10.6.8",
+  "capture_size": [
+    2628,
+    1746
+  ],
+  "selected_tab_roi": [
+    370,
+    365,
+    500,
+    370
+  ],
+  "unselected_tab_roi": [
+    1000,
+    369,
+    1040,
+    373
+  ],
+  "traffic_light_pixel": [
+    215,
+    366
+  ],
+  "records": [
+    {
+      "capture": "snowium-pass25-active-1.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.91,
+        239.96,
+        239.93
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-active-2.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.91,
+        239.96,
+        239.93
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-active-3.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.91,
+        239.96,
+        239.93
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-inactive-1.png",
+      "traffic_light_rgb": [
+        222,
+        222,
+        222
+      ],
+      "selected_tab_mean_rgb": [
+        244.14,
+        244.35,
+        244.0
+      ],
+      "unselected_tab_mean_rgb": [
+        237.45,
+        237.45,
+        237.45
+      ]
+    },
+    {
+      "capture": "snowium-pass25-inactive-2.png",
+      "traffic_light_rgb": [
+        222,
+        222,
+        222
+      ],
+      "selected_tab_mean_rgb": [
+        244.14,
+        244.35,
+        244.0
+      ],
+      "unselected_tab_mean_rgb": [
+        237.45,
+        237.45,
+        237.45
+      ]
+    },
+    {
+      "capture": "snowium-pass25-inactive-3.png",
+      "traffic_light_rgb": [
+        222,
+        222,
+        222
+      ],
+      "selected_tab_mean_rgb": [
+        244.14,
+        244.35,
+        244.0
+      ],
+      "unselected_tab_mean_rgb": [
+        237.45,
+        237.45,
+        237.45
+      ]
+    },
+    {
+      "capture": "snowium-pass25-same-app-x-active-1.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.88,
+        239.98,
+        240.01
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-same-app-x-active-2.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.88,
+        239.98,
+        240.01
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-same-app-x-active-3.png",
+      "traffic_light_rgb": [
+        253,
+        92,
+        97
+      ],
+      "selected_tab_mean_rgb": [
+        239.88,
+        239.98,
+        240.01
+      ],
+      "unselected_tab_mean_rgb": [
+        212.5,
+        212.5,
+        212.5
+      ]
+    },
+    {
+      "capture": "snowium-pass25-same-app-x-inactive-1.png",
+      "traffic_light_rgb": [
+        222,
+        222,
+        222
+      ],
+      "selected_tab_mean_rgb": [
+        244.08,
+        244.38,
+        244.1
+      ],
+      "unselected_tab_mean_rgb": [
+        237.45,
+        237.45,
+        237.45
+      ]
+    },
+    {
+      "capture": "snowium-pass25-same-app-x-inactive-2.png",
+      "traffic_light_rgb": [
+        222,
+        222,
+        222
+      ],
+      "selected_tab_mean_rgb": [
+        244.08,
+        244.38,
+        244.1
+      ],
+      "unselected_tab_mean_rgb": [
+        237.45,
+        237.45,
+        237.45
+      ]
+    }
+  ]
+}

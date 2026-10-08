@@ -2,6 +2,8 @@
 
 Chromium Legacy 124.0.6367.207.1 ported to **Intel Snow Leopard 10.6.8**. This repository contains the source patch, compatibility sources, native probes and release tooling. Chromium itself and the SDKs remain external build inputs.
 
+The source includes an experimental native Cocoa core UI port from Chromium 7, developed on **cocoa-2010-ui**. The window chrome, tabs, toolbar, bookmarks bar and omnibox field use AppKit controls and adapted historical source. Chromium 124 still supplies the browser models, menu features and renderer. **2010 UI (Experimental)** and **Aqua Scrollbars (Experimental)** are separate opt-in settings in `chrome://flags`; both default to disabled. The old application icon applies to both UI modes. See [the UI port record](port/cocoa2010/README.md) for build instructions, provenance and validation limits. The published pass40 release described below does not include this experiment.
+
 ## Run
 
 Download the ZIP from a GitHub Release, extract it, and double-click `Chromium.app`. You can move the app to `/Applications`. No Terminal command, replacement system library, sandbox-disabling option or certificate override is required. Keep the complete app bundle together.

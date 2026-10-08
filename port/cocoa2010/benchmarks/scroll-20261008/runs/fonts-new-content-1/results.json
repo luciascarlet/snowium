@@ -1,0 +1,183 @@
+{
+  "label": "fonts-new-content-1",
+  "elapsedMs": 55937.195250000004,
+  "cpu": [
+    {
+      "type": "browser",
+      "id": 20107,
+      "cpuTime": 32.417929,
+      "seconds": 0.7563490000000002
+    },
+    {
+      "type": "renderer",
+      "id": 20161,
+      "cpuTime": 1.343816,
+      "seconds": 0.11791599999999991
+    },
+    {
+      "type": "renderer",
+      "id": 20126,
+      "cpuTime": 138.074365,
+      "seconds": 28.700722
+    },
+    {
+      "type": "renderer",
+      "id": 20115,
+      "cpuTime": 54.96409,
+      "seconds": 0.129686999999997
+    },
+    {
+      "type": "GPU",
+      "id": 20109,
+      "cpuTime": 26.833179,
+      "seconds": 4.283995000000001
+    },
+    {
+      "type": "network.mojom.NetworkService",
+      "id": 20110,
+      "cpuTime": 3.721667,
+      "seconds": 0.28437800000000024
+    },
+    {
+      "type": "storage.mojom.StorageService",
+      "id": 20111,
+      "cpuTime": 1.400658,
+      "seconds": 0.08479499999999995
+    },
+    {
+      "type": "tracing.mojom.TracingService",
+      "id": 20127,
+      "cpuTime": 31.220516,
+      "seconds": 0.4469840000000005
+    }
+  ],
+  "histogramBefore": {
+    "histograms": [
+      {
+        "name": "Renderer4.GpuRasterizationEnabled",
+        "sum": 0,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 0,
+            "high": 1,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.ImageDecodeTaskDurationUs.Png.Software",
+        "sum": 2005,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1774,
+            "high": 2336,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.ImageDecodeTaskDurationUs.Software",
+        "sum": 2005,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1774,
+            "high": 2336,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.SoftwareImageDecodeState",
+        "sum": 1,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1,
+            "high": 2,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.SoftwareImageDecodeState.FirstLockWasted",
+        "sum": 0,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 0,
+            "high": 1,
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "histogramAfter": {
+    "histograms": [
+      {
+        "name": "Renderer4.GpuRasterizationEnabled",
+        "sum": 0,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 0,
+            "high": 1,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.ImageDecodeTaskDurationUs.Png.Software",
+        "sum": 2005,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1774,
+            "high": 2336,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.ImageDecodeTaskDurationUs.Software",
+        "sum": 2005,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1774,
+            "high": 2336,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.SoftwareImageDecodeState",
+        "sum": 1,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 1,
+            "high": 2,
+            "count": 1
+          }
+        ]
+      },
+      {
+        "name": "Renderer4.SoftwareImageDecodeState.FirstLockWasted",
+        "sum": 0,
+        "count": 1,
+        "buckets": [
+          {
+            "low": 0,
+            "high": 1,
+            "count": 1
+          }
+        ]
+      }
+    ]
+  },
+  "browserVersion": "Chrome/124.0.6367.207.1"
+}

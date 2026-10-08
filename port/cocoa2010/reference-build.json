@@ -1,0 +1,8 @@
+{
+  "url": "https://commondatastorage.googleapis.com/chromium-browser-snapshots/Mac/60026/chrome-mac.zip",
+  "sha256": "6c4759c9228abbe7099206d947251d5780d82d0c8232bba3a196de3f12da9f5d",
+  "revision": 60026,
+  "version": "7.0.530.0",
+  "minimum_system": "10.5.0",
+  "source": "Official Google Chromium Mac snapshots"
+}
