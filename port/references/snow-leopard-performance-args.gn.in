@@ -1,0 +1,41 @@
+target_cpu = "x64"
+is_debug = false
+is_component_build = false
+is_official_build = false
+symbol_level = 0
+blink_symbol_level = 0
+v8_symbol_level = 0
+treat_warnings_as_errors = false
+use_system_xcode = true
+mac_sdk_path = "@PORT_ROOT@/MacOSX14.5.sdk"
+mac_sdk_min = "14.0"
+mac_deployment_target = "10.6"
+mac_min_system_version = "10.6.8"
+clang_base_path = "@PORT_ROOT@/toolchain/snow-clang"
+use_lld = false
+use_thin_lto = false
+chrome_pgo_phase = 0
+enable_dsyms = false
+enable_stripping = false
+fatal_linker_warnings = false
+enable_nacl = false
+enable_rust = true
+use_custom_libcxx = true
+use_remoteexec = false
+use_goma = false
+clang_use_chrome_plugins = false
+skia_use_metal = false
+skia_use_dawn = false
+dawn_enable_metal = false
+
+content_shell_version = "124.0.6367.207.1"
+content_shell_major_version = "124"
+angle_enable_metal = false
+
+# Skip the second Blink build for ARM-host/x64-target startup acceleration.
+use_v8_context_snapshot = false
+
+# Profiling A/B candidate: identical source and optimization, diagnostics off.
+dcheck_always_on = false
+enable_expensive_dchecks = false
+v8_enable_debugging_features = false

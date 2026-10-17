@@ -7892,3 +7892,24 @@
    }
  #endif
  
+--- a/chrome/browser/web_applications/os_integration/web_app_shortcut_mac.mm
++++ b/chrome/browser/web_applications/os_integration/web_app_shortcut_mac.mm
+@@ -805,7 +805,8 @@
+ 
+   NSURL* strings_url =
+       base::apple::FilePathToNSURL(localized.Append(locale + ".strings"));
+-  [strings_dict writeToURL:strings_url error:nil];
++  // Snow Leopard supports the atomic plist writer, but not writeToURL:error:.
++  [strings_dict writeToURL:strings_url atomically:YES];
+ 
+   content::GetUIThreadTaskRunner({})->PostTask(
+       FROM_HERE, base::BindOnce(&GetImageResourcesOnUIThread,
+@@ -1793,7 +1794,7 @@
+ 
+   NSURL* localized_url =
+       base::apple::FilePathToNSURL(localized_dir.Append("InfoPlist.strings"));
+-  return [strings_plist writeToURL:localized_url error:nil];
++  return [strings_plist writeToURL:localized_url atomically:YES];
+ }
+ 
+ bool WebAppShortcutCreator::UpdateIcon(const base::FilePath& app_path) const {

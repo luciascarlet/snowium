@@ -1,1 +1,1 @@
-Adds an optional experimental Chromium 7-style native Mac interface, with classic tabs, toolbar, bookmarks bar and address field. Classic Aqua scrollbars are available independently. Both options are disabled by default and can be enabled through `chrome://flags`. The original Chromium application icon appears in both modes.
+Rebuilt with debugging and diagnostic checks disabled to improve browsing performance.

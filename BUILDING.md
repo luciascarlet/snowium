@@ -1,10 +1,10 @@
 # Source and build record
 
-The current release is a **prebuilt Cocoa 2010 UI preview on the pass40 base**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
+The current release is a **prebuilt performance build with diagnostics disabled**, not a GitHub CI build. GitHub hosts the download and runs lightweight source/release integrity checks. No self-hosted runner is required.
 
 The working app was built on Apple Silicon with Xcode 27.1, Chromium's pinned host compiler, MacPorts Clang 19.1.7 for x86_64 compilation, modified SDK 14.5 headers, original SDK 10.6 audio link stubs, bundled libc++/libc++abi, PLWeakCompatibility, MacPorts LegacySupport and an emulated-TLS Rust standard library. The app targets Intel OS X 10.6.8.
 
-The current app is optimized: `is_debug=false`, `-O2`, and debug symbol levels are zero. Its “Developer Build” label comes from `is_official_build=false`. Additional `DCHECK` diagnostics remain enabled; PGO and ThinLTO are disabled. Their performance impact has not been measured.
+The current app is optimized: `is_debug=false`, `-O2`, and debug symbol levels are zero. Its “Developer Build” label comes from `is_official_build=false`. Chromium `DCHECK` diagnostics, expensive checks and V8 debugging features are disabled in this build. PGO and ThinLTO remain disabled. The retained same-source comparison on 10.6.8 measured Speedometer 3.1 at 1.26 ± 0.14 with diagnostics and 3.28 ± 0.48 without; this is a workload-specific result.
 
 The source export retains the Snow Leopard patch, overlays, runtime sources, build scripts, pinned Chromium Legacy dependency patches and restoration metadata. The Snow Leopard patch applies to stock Chromium 124.0.6367.207 **after** the Legacy patches recorded in `port/references/legacy-124-pins.json`. `port/overlay/` supplies new files. `source-manifest.json` records the hashes of these exported inputs.
 
@@ -30,9 +30,9 @@ To regenerate the package on the modern Mac:
 
 ```sh
 python3 ci/package.py \
-  --app /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/Chromium.app \
-  --credits /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopard/gen/components/resources/about_credits.html \
-  --version 124.0.6367.207-sl.4 --output release-assets/v124.0.6367.207-sl.4
+  --app /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopardPerformance/Chromium.app \
+  --credits /path/to/Snowium/modern-port/chromium-124.0.6367.207/out/SnowLeopardPerformance/gen/components/resources/about_credits.html \
+  --version 124.0.6367.207-sl.5 --output release-assets/v124.0.6367.207-sl.5
 ```
 
 Use a fresh output directory; packaging refuses to overwrite assets. To upload after creating/pushing a GitHub repository, follow [PUBLISHING.md](PUBLISHING.md). Packaging alone does not publish a release.
@@ -42,3 +42,5 @@ Use a fresh output directory; packaging refuses to overwrite assets. To upload a
 `port/tests/style-custom-properties.html` reproduces the registered custom-property/animation/SVG cache mismatch. It checks dynamically changed universal values, unset values and inherited widths while animation frames advance. It reproduced the style assertion before the fix and passed afterward on the target OS.
 
 `port/scripts/probe_style_crash.mjs` is the retained loopback DevTools fixture observer, run with a modern Node providing global `fetch` and `WebSocket`. Set `SNOWIUM_CDP_ENDPOINT` for the isolated test browser and pass the served fixture URL and observation duration. Hosted CI hashes these inputs; it does not execute native renderer tests.
+
+The published build comes from `out/SnowLeopardPerformance`, configured separately with the arguments retained in `port/references/snow-leopard-performance-args.gn.in`. The historical `build.sh` command above targets the original `SnowLeopard` output; it does not reproduce this performance configuration by itself.

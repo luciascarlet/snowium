@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include "base/command_line.h"
+#include "base/functional/callback_helpers.h"
 #include "base/strings/sys_string_conversions.h"
 #include "chrome/app/chrome_command_ids.h"
 #include "chrome/grit/generated_resources.h"
@@ -438,7 +439,7 @@ OmniboxViewViews* Omnibox(BrowserView* view) {
 }
 - (void)showPageInfo {
   auto* active = _view->browser()->tab_strip_model()->GetActiveWebContents();
-  if (active) ShowPageInfoDialog(active, {});
+  if (active) ShowPageInfoDialog(active, base::DoNothing());
 }
 @end
 

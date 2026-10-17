@@ -30,3 +30,11 @@ No GitHub remote, hosted repository or published release was created. No origina
 - ChatGPT's login form rendered, but cold JavaScript module compilation caused minutes-long stalls, Page Unresponsive and temporary blank content. Full authentication and extended stability remain unverified.
 - Release preparation checks all 159 local app files against the retained target deployment provenance. The installed target framework was rechecked against SHA-256 `9fe7701d07c4be2aeb728a821a88e7f3109147af6cd7eb8e1c177a82841a3730`.
 - Source export includes the new style fix, regression fixture and observer, plus the updated native font-probe expectations from the prior fix. Native test results come from the crash-fix records; packaging and hosted integrity checks do not perform native UI tests.
+
+## Diagnostics-disabled performance release
+
+The October 9 performance candidate is published as `v124.0.6367.207-sl.5`. Release preparation verified that all 203 physical bundle files match the retained native deployment inventory. The framework SHA-256 is `79389e8b604c772d011dca865dc7493ee318c794e013ecb8d92502dff1b84d13`.
+
+Its recorded GN argument hash matches the current output. The build-verification record has expensive DCHECKs disabled and no V8 `DEBUG`, `DCHECK_ALWAYS_ON`, heap-verification or force-slow-path definitions. The release retains the existing compiled PWA plist compatibility and Page Info callback fixes; packaging does not introduce further browser changes.
+
+The retained same-source native comparison measured Speedometer 3.1 at 1.26 ± 0.14 with diagnostics and 3.28 ± 0.48 without (three iterations each). These are prior measured results, not newly rerun benchmarks or a promise of equal speedups on every site. Broad long-session and authenticated-site validation remain incomplete.

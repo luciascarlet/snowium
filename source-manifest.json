@@ -1,7 +1,7 @@
 {
   "upstream": "124.0.6367.207",
   "legacy": "124.0.6367.207.1",
-  "candidate": "cocoa2010-native-ui-preview",
+  "candidate": "performance-no-diagnostics",
   "files": {
     "licenses/CHROMIUM": "368cca1106be99d39ecd32a38d8305585d802a475effb66380b91ffc9bcf709b",
     "licenses/GoogleToolboxForMac": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
@@ -45,7 +45,7 @@
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/bookmark_bar.h": "04d66a8a3647f6789eb3e26c6c9adcbcb3fe8499a242ea1b0258927ebceab958",
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/bookmark_bar.mm": "d1d91edecbce9d757747ea5d9e5a943e20c16a494c18bae32ce42f8519639817",
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/browser_adapter.h": "e1defe3727b87da1ce0eaa5d5274505855a39121c577868099e289915f139dfe",
-    "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/browser_adapter.mm": "46fb81b9130bae00ca3111c1670da88b2d913bc203b78468990251dbfd6ac8b3",
+    "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/browser_adapter.mm": "1c7b46df4636f1b5126104bce0b2d098912d8ae07625530d26c338b5301f66f3",
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/controls.h": "b31efbd6fc537298720e5e0cfc4028f95216b9292a559859423d9961efe58b00",
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/controls.mm": "48963928fa11ecb3d666328b9246615ea9b8a0347450046099d217dcc01af3a0",
     "port/cocoa2010/overlay/chrome/browser/ui/cocoa2010/omnibox_cell.mm": "cca9f91bc4f6ac9143a4c8e1b196afdfa69ab29602fd366cf16090db54ca6630",
@@ -272,7 +272,7 @@
     "port/overlay/snow_leopard/security_compat.h": "44c5ed3be25bfe77507fb81b1b6188b48ec54f223fa58ca841078dfba0ec656f",
     "port/overlay/snow_leopard/system_compat.cc": "dc87a3f88d861c9d8ae9d38a52a51bb27b15865f490e42a13dd758b5885d69f8",
     "port/overlay/snow_leopard/system_compat.h": "0ffdcbe2909abd1b16a032412782e248ebff50fd4a9aa3452828e1355e2f6c2a",
-    "port/patches/chromium-124-snow-leopard.patch": "02e602cad1fdc7dbbbccd40b9ca465b9d6be921b3c32d934fa854fc9869a42c5",
+    "port/patches/chromium-124-snow-leopard.patch": "759eba351dee8fb42b05c1a80778ecabbbc7d586560b2fbbe3a920e827c1c26c",
     "port/references/API-MAP.md": "42ed121af9739f3c88e2e0e7406fe5b5950b4b72293371163798d72599779c62",
     "port/references/angle-lion.patch": "59c0db5e0f640ecdf506642e2201b35c3207af6f0b31f35d566374fa5fd8156f",
     "port/references/base-selection.md": "602ff4a9fe7c35ad68f631f12873840a15556b905772971cb4e9db3a4c119663",
@@ -633,7 +633,8 @@
     "third_party/macports-legacy-support/xtest/test_targetconds.c": "c88660ed7d3ebd97474231303584e2a27e6bb9a5040f747f062680ba5da66af0",
     "third_party/macports-legacy-support/xtest/test_usb.c": "2ad3678b2ebb757f25fcd36b912f60103dab5df7724733c08c95a488564f2e5c",
     "third_party/macports-legacy-support/xtest/test_utunh.c": "668c0932183bcfb7f19b8db68eca683b2ad4d5c887c7854a699a0fe54a0fc621",
-    "third_party/macports-legacy-support/xtest/test_xplugin.c": "0e23962b093d484105446163a33880f17b57b7e66e14dac95b24a4e195f49fa9"
+    "third_party/macports-legacy-support/xtest/test_xplugin.c": "0e23962b093d484105446163a33880f17b57b7e66e14dac95b24a4e195f49fa9",
+    "port/references/snow-leopard-performance-args.gn.in": "055f41cfdfc208c991a24a1981248481178ce24fc53aa3847e5e80a43cbb0494"
   },
   "base_candidate": "pass40-style-fix"
 }
